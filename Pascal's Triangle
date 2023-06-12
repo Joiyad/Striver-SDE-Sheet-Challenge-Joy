@@ -12,6 +12,7 @@ long long ncr(int n, int r){
 // main function
 vector<vector<long long int>> printPascal(int n) 
 {
+// here the intution is each element in Pascal's triangle can be calculated by nCr, since we have to calculate all the elements so will find all the elements
   vector<vector<long long>> ans;
   for(int i=1; i<=n; i++){
     vector<long long> v;
