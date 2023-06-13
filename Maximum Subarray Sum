@@ -1,0 +1,30 @@
+long long maxSubarraySum(int arr[], int n)
+{
+    
+    // Approach 1: brute force, we can simply calculate sum for all possible subarrays 
+    // T=O(n^3) S=O(1)
+    long long ans = 0;
+    for(int i=0; i<n; i++){
+        long long sum = 0;
+        for(int j=i; j<n; j++){
+            int k=i;
+            while(k<=j){
+                sum += arr[k];
+            }
+    //         // optimization: we can reduce time complexity from cubic to quadratic by small observation
+    //         // we can see that in each iteration we are just adding an element so no need to calcualte sum from starting.
+            // sum += arr[j];
+            // ans = max(ans, sum);
+        }
+    }
+
+    // Approach 2: Kadane's algorithm, this is a standard Kadane's algorithm problem
+    // T=O(n) S=O(1)
+    long long sum = 0;
+    for(int i=0; i<n; i++){
+        sum = max(sum+arr[i], (long long)arr[i]);
+        ans = max(ans, sum);
+    }
+
+    return ans;
+}
