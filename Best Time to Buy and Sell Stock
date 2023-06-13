@@ -1,0 +1,23 @@
+int maximumProfit(vector<int> &prices){
+    // brute force we can simply iterate through array by keeping buy fixed at one index at a time
+    // T=O(n^2) S=O(1)
+    int n = prices.size();
+    // int ans = 0;
+    // for(int i=0; i<n; i++){
+    //     for(int j=i+1; j<n; j++){
+    //         ans = max(ans, prices[j]-prices[i]);
+    //     }
+    // }
+    // return ans;
+
+    // optimized approach , here we can observe that for maximum profit we should buy at least price
+    // keep track of minimum and check the profit
+    // T=O(n) S=O(1)
+    int minm = prices[0];
+    int ans = 0;
+    for(int i=1; i<n; i++){
+        ans = max(ans, prices[i]-minm);
+        minm = min(minm, prices[i]);
+    }
+    return ans;
+}
