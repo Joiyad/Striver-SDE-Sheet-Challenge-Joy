@@ -1,0 +1,33 @@
+void sort012(int *arr, int n)
+{
+   //  Approach 1: we can use any sorting method
+   //  T=O(nlogn) S=O(logn)
+
+   // Approach 2: using dutch national flag algorithm, here set 3 pointers low, mid and high
+   // we will iterate through array using mid and if found zero then swap with low and if 2 then swap with high
+   // ultimately our array will be sorted.
+   // T=O(n) S=O(1)
+   int low = 0;
+   int mid = 0;
+   int high = n-1;
+
+   while(mid<=high){
+      switch(arr[mid]){
+         case 0:
+            swap(arr[mid], arr[low]);
+            mid++;
+            low++;
+            break;
+
+         case 1: 
+            mid++;
+            break;
+
+         case 2:
+            swap(arr[mid], arr[high]);
+            high--;
+            break;
+      }
+   }
+
+}
