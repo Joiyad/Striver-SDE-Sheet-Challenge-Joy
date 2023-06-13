@@ -1,6 +1,7 @@
 void setZeros(vector<vector<int>> &matrix)
 {
-	// brute force
+	// Approach 1: brute force here we will iterate through all matrix and whenever we find an element with value 0 we will mark that particulat row and column elements as zero
+	// T=O(m*n)^2 S=O(1)
 	int n = matrix.size();
 	int m = matrix[0].size();
 	for(int i=0; i<n; i++){
@@ -24,7 +25,9 @@ void setZeros(vector<vector<int>> &matrix)
 			if(matrix[i][j] == -1) matrix[i][j] = 0;
 		}
 	}
-
+	
+	// Approach 2: we can use extra space for storing the rows and columns that contain zeroes and later we can iterate again to make that rows and columns zero.
+	// T = O(m*n) S= O(n + m)
 	// using extra space
 	vector<int> row(n, 0);
 	vector<int> col(m, 0);
@@ -54,8 +57,9 @@ void setZeros(vector<vector<int>> &matrix)
 		}
 	}
 
-	// using constant space
+	// Approach 3: using constant space as we can use first row and first columns to store row and columns that contains zero.
 	// we have to handle first element separately as it is common between row and column
+	// T=O(m*n) S=O(1)
 	int isCol0 = 1;
 	for(int i=0; i<n; i++){
 		for(int j=0; j<m; j++){
