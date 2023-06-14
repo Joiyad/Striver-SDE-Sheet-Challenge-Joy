@@ -1,0 +1,31 @@
+int modularExponentiation(int x, int n, int m) {
+	// approach 1: using inbuilt function
+	long long ans = pow(x, n);
+	return (int)ans%m;
+
+	// approach 2: brute force
+	double ans = 1;
+	for(int i=1; i<=n; i++){
+		ans *= x;
+	}
+	return (int)ans%m;
+
+	// approach 3
+		if(m == 1) return 0;
+		long ans = 1;
+		long newx = x;
+
+		// we will try to make n even then multiply the no. x with itself until it is divisible by 2;
+        while(n>0){
+            if(n % 2 != 0){
+                ans = ((ans)%m * (newx)%m)%m;
+                n -= 1;
+            }
+            else{
+                newx = ((newx)%m * (newx)%m)%m;
+                n /= 2;
+            }
+        }
+
+        return (int)(ans%m);
+}
