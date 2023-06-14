@@ -1,0 +1,61 @@
+long long mergeArrays(long long *arr, int s, int e, int mid){
+    int i=s;
+    int j=mid+1;
+    long long count=0;
+    vector<int> temp;
+
+    while(i<=mid && j<=e){
+        if(arr[i] > arr[j]){
+            count += (mid+1-i);
+            temp.push_back(arr[j]);
+            j++;
+        }
+        else{
+            temp.push_back(arr[i]);
+            i++;
+        }
+    }
+
+    while(i<=mid){
+        temp.push_back(arr[i]);
+        i++;
+    }
+
+    while(j<=e){
+        temp.push_back(arr[j]);
+        j++;
+    }
+
+    for(int k=s; k<=e; k++){
+        arr[k] = temp[k-s];
+    }
+
+    return count;
+}
+
+long long mergeSort(long long *arr, int s, int e){
+    long long count = 0;
+    if(s < e){
+        int mid = (s+e)/2;
+        count += mergeSort(arr, s, mid);
+        count += mergeSort(arr, mid+1, e);
+        count += mergeArrays(arr, s, e, mid);
+    }
+    return count;
+}
+
+long long getInversions(long long *arr, int n){
+    // brute force
+    // T=O(n^2) S=O(1)
+    long long count = 0;
+    for(int i=0; i<n; i++){
+        for(int j=i+1; j<n; j++){
+            if(arr[i] > arr[j]) count++;
+        }
+    }
+    return count;
+
+    // using merge sort
+    // T=O(nlogn) S=O(n)
+    return mergeSort(arr, 0, n-1);
+}
