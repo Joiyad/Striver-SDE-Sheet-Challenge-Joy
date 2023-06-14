@@ -1,0 +1,47 @@
+int findMajorityElement(int arr[], int n) {
+		// Approach 1: brute force
+        sort(arr, arr+n);
+        int count = 1;
+        for(int i=1; i<n; i++){
+            if(arr[i] == arr[i-1]) count++;
+            else count = 1;
+
+            if(count > (n/2)) return arr[i];
+        }
+        return -1;
+
+        // Approach 2: using hashmap
+        unordered_map<int, int> umap;
+        for(int i=0; i<n; i++){
+            umap[arr[i]]++;
+        }
+
+        for(auto x: umap){
+            if(x.second > n/2) return x.first;
+        }
+
+        return -1;
+
+		// Approach 3: Moore's voting approach
+		// use two pointers one keep track of element and other counter
+		int count = 0;
+		int maj_element = 0;
+
+		for(int i=0; i<n; i++){
+			if(count == 0){
+				maj_element = arr[i];
+				count++;
+			}
+			else if(maj_element == arr[i]) count++;
+			else count--;
+		}
+
+		// confirm whether the current majority element exists or not
+		count = 0;
+		for(int i=0; i<n; i++){
+			if(maj_element == arr[i]) count++;
+		}
+
+		if(count > floor(n/2)) return maj_element;
+		return -1;
+}
