@@ -1,0 +1,30 @@
+vector<vector<int>> mergeIntervals(vector<vector<int>> &intervals)
+{
+    // The intution is we have to check the end of last interval and compare with start and end of current interval.
+    // if end of last interval is greater than start of current interval it means overlapping exists.
+    // T=O(n)+O(nlogn) S=O(1) as no extra space is used.
+    int n = intervals.size();
+
+    // sort
+    sort(intervals.begin(), intervals.end());
+
+    vector<vector<int>> ans;
+    // push the first element
+    ans.push_back({intervals[0][0], intervals[0][1]});
+
+    for(int i=1; i<n; i++){
+        // overlapping case
+        if(ans.back()[1] >= intervals[i][0]){
+            if(ans.back()[1] < intervals[i][1]){
+                ans.back()[1] = intervals[i][1];
+            }
+        }
+        // no overlapping
+        else{
+            ans.push_back({intervals[i][0], intervals[i][1]});
+        }
+    }
+
+    return ans;
+
+}
