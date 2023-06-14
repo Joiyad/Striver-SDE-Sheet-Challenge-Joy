@@ -1,0 +1,73 @@
+#include <bits/stdc++.h> 
+int mergeArrays(vector<int> &arr, int s, int mid, int e){
+	// count total no. of reverse pairs
+	int count = 0;
+	int l = mid+1;
+	for(int k=s; k<=mid; k++){
+		while(l<=e && arr[k] > 2*(long long)arr[l]){
+			l++;
+		}
+		count += (l-mid-1);
+	}
+    
+	// merge arrays
+	int i = s;
+	int j = mid+1;
+	vector<int> temp;
+	while(i<=mid && j<=e){
+		if(arr[i] > arr[j]){
+			temp.push_back(arr[j]);
+			j++;
+		}
+		else{
+			temp.push_back(arr[i]);
+			i++;
+		}
+	}
+
+	while(i<=mid){
+		temp.push_back(arr[i]);
+		i++;
+	}
+
+	while(j<=e){
+		temp.push_back(arr[j]);
+		j++;
+	}
+
+	for(int k=s; k<=e; k++){
+		arr[k] = temp[k-s];
+	}
+	return count;
+}
+
+
+int mergeSort(vector<int> &arr, int s, int e){
+	int count = 0;
+	if(s < e){
+		int mid = (s+e)/2;
+
+		count += mergeSort(arr, s, mid);
+		count += mergeSort(arr, mid+1, e);
+		count += mergeArrays(arr, s, mid, e);
+	}
+	return count;
+}
+
+int reversePairs(vector<int> &arr, int n){
+	// brute force
+	// T=O(n^2) S=O(1)
+	int count = 0;
+	for(int i=0; i<n; i++){
+		for(int j=i+1; j<n; j++){
+			if(arr[i] > 2*arr[j]){
+				count++;
+			}
+		}
+	}
+	return count;
+
+	// optimized approach: using merge sort
+	// T=O(nlogn) S=O(n)
+	return mergeSort(arr, 0, n-1);
+}
