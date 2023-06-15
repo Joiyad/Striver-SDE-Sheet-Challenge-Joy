@@ -25,4 +25,21 @@ int uniqueSubstrings(string str)
       maxLen = max(maxLen, j - i + 1);
     }
     return maxLen;
+
+ // Approach 3: similar but slightly different here we will try to memoize the previous outputs
+    // T=O(n) S=O(n)
+    int n = str.length();
+    int i=0, j=0;
+    int len = 0;
+    vector<int> dp(256, -1);
+
+    while(j<n){
+      if(dp[str[j]] != -1){
+        i = max(dp[str[j]]+1, i);
+      }
+      dp[str[j]] = j;
+      len = max(len, j-i+1);
+      j++;
+    }
+    return len;
 }
