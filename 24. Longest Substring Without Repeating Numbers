@@ -1,0 +1,28 @@
+#include <bits/stdc++.h> 
+int uniqueSubstrings(string str)
+{
+    // brute force: try all substrings and check if duplicates exists or not
+
+    // Approach 2: using set, here we will store elements until we find duplicates and when
+    // we find duplicate erase them.
+    // T=O(n) S=O(n)
+    int n = str.length();
+     if(n==0)
+      return 0;
+    int maxLen = INT_MIN;
+    unordered_set < int > s;
+    int i = 0;
+    for (int j = 0; j < n; j++) // outer loop for traversing the string
+    {
+      if (s.find(str[j]) != s.end()) //if duplicate element is found
+      {
+        while (i < j && s.find(str[j]) != s.end()) {
+          s.erase(str[i]);
+          i++;
+        }
+      }
+      s.insert(str[j]);
+      maxLen = max(maxLen, j - i + 1);
+    }
+    return maxLen;
+}
