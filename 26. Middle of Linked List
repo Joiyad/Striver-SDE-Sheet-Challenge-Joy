@@ -1,0 +1,15 @@
+Node *findMiddle(Node *head) {
+    // Approach 1: a simple approach can be finding the length of linked list and again traversing
+    // through linked list length/2 times.
+
+    // Approach 2: slow and fast pointer approach
+    Node* slow = head;
+    Node* fast = head;
+
+    while(fast && fast->next){
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
