@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+
+int LongestSubsetWithZeroSum(vector < int > arr) {
+
+  // brute force: we can simply iterate through array using two nested loops and check sum
+  // T=O(n^2) S=O(1)
+  int n = arr.size();
+  int maxm = 0;
+  for(int i=0; i<n; i++){
+    int sum = 0;
+    for(int j=i; j<n; j++){
+      sum += arr[j];
+      if(sum == 0) maxm = max(j-i+1, maxm);
+    }
+  }
+
+  return maxm;
+
+  // Approach 2: using hashmap, we can store previous sum and is sum is repeated that means a subarray with sum has occured
+  // T=O(N) S=O(N) 
+  unordered_map<int, int> umap;
+  int n = arr.size();
+  int maxm = 0;
+  int sum = 0;
+
+  for(int i=0; i<n; i++){
+    sum += arr[i];
+    // if sum till now is zero that means from 0th index all elements form  a subarry with sum 0.
+    if(sum == 0) maxm = i+1;
+
+    if(umap.find(sum) != umap.end()) {
+      maxm = max(maxm, i-umap[sum]);
+    }
+    else umap[sum] = i;
+  }
+
+  return maxm;
+}
