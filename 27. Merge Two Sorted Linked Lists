@@ -1,0 +1,55 @@
+Node<int>* sortTwoLists(Node<int>* head1, Node<int>* head2)
+{
+    // Approach 1: using extra space 
+    if(head1 == NULL && head2 == NULL){
+        return NULL;
+    }
+    Node<int>* dummy = new Node<int>(0);
+    Node<int>* tail = dummy;
+    
+    while(head1 && head2){
+        if(head1->data <= head2->data){
+            Node<int>* n = new Node<int>(head1->data);
+            tail->next = n;
+            tail = tail->next;
+            head1 = head1->next;
+        }
+        else{
+            Node<int>* n = new Node<int>(head2->data);
+            tail->next = n;
+            tail = tail->next;
+            head2 = head2->next;
+        }
+    }
+    
+    if(head1){
+        tail->next = head1;
+    }
+    
+    if(head2){
+        tail->next = head2;
+    }
+    
+    return dummy->next;
+
+    // Approach 2: using constant space we will store smaller numbers in head1 and larger numbers in head2
+    if(head1 == NULL) return head2;
+    if(head2 == NULL) return head1;
+
+    if(head1->data > head2->data) swap(head1, head2);
+    Node<int>* ans = head1;
+
+    while(head1 && head2){
+        // to store the last sorted element
+        Node<int>* temp = NULL;
+
+        while(head1 && head1->data <= head2->data){
+            temp = head1;
+            head1 = head1->next;
+        }
+
+        temp->next = head2;
+        swap(head1, head2);
+    }
+    return ans;
+}
