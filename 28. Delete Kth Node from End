@@ -1,0 +1,76 @@
+/*
+Following is the class structure of the Node class:
+
+class Node
+{
+public:
+    int data;
+    Node *next;
+    Node()
+    {
+        this->data = 0;
+        next = NULL;
+    }
+    Node(int data)
+    {
+        this->data = data; 
+        this->next = NULL;
+    }
+    Node(int data, Node* next)
+    {
+        this->data = data;
+        this->next = next;
+    }
+};
+*/
+int length(Node* head){
+    int count = 0;
+    while(head){
+        count++;
+        head = head->next;
+    }
+    return count;
+}
+
+Node* removeKthNode(Node* head, int k)
+{
+    // brute force
+    // find length then position of node to be deleted from front = length-K
+    // T=O(2*n) S=O(1);
+    // int len = length(head);
+    // Node* oldHead = head;
+    // int newK = len - k - 1;
+    // // edge cases
+    // if(head == NULL) return NULL;
+    // if(newK < 0) return head->next;
+
+    // while(newK--){
+    //     head = head->next;
+    // }
+
+    // head->next = head->next->next;
+    // return oldHead;
+
+    // Approach 2: we can use two pointers first i will let one pointers to exceed other by k
+    // so when first pointer reach end the other would be k behind and that is what need to be deleted
+    // T=O(n) S=O(1)
+    Node* slow = head;
+    Node* fast = head;
+
+    if(head == NULL) return NULL;
+    while(k--) fast = fast->next;
+    //edge case if first element need to be removed
+    if(fast == NULL) return head->next;
+
+    while(fast->next){
+        slow = slow->next;
+        fast = fast->next;
+    }
+
+    Node* temp = slow->next;
+    slow->next = slow->next->next;
+    temp->next = NULL;
+    delete temp;
+
+    return head;
+}
