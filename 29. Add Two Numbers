@@ -1,0 +1,20 @@
+Node *addTwoNumbers(Node *l1, Node *l2)
+{
+    // Approach: iterate over both linked lists and add them also store carry 
+    Node* dummy = new Node(0);
+        Node* ans = dummy;
+        int carry = 0;
+
+        while(l1 || l2 || carry){
+            int sum = 0;
+            sum = carry + (l1 ? l1->data : 0) + (l2 ? l2->data : 0);
+            Node* n = new Node(sum%10);
+            ans->next = n;
+            ans = ans->next;
+            carry = sum / 10;
+            if(l1) l1 = l1->next;
+            if(l2) l2 = l2->next;
+        }
+
+        return dummy->next;
+}
