@@ -1,0 +1,27 @@
+Node *firstNode(Node *head)
+{
+    // we will iterate over the linked list using two pointers fast and slow 
+    // when both will meet at same node this means cycle exist
+    // to find node we will set slow = head and start iterating again till slow and fast become equal
+    // the node at which slow and fast will meet again is our answer
+    
+    if(head == NULL || head->next==NULL) return NULL;
+    Node* slow = head->next;
+    Node* fast = head->next->next;
+
+    while(slow != fast){
+        // if cycle not exist
+        if(fast == NULL || fast->next == NULL) return NULL;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    fast = head;
+
+    while(slow != fast){
+        slow = slow->next;
+        fast = fast->next;
+    }
+
+    return slow;
+}
