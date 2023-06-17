@@ -1,0 +1,62 @@
+int length(Node* head){
+	int count = 0;
+	while(head){
+		head = head->next;
+		count++;
+	}
+	return count;
+}
+
+Node* reverse(Node* head){
+	if(head == NULL) return NULL;
+	Node* prev = NULL;
+	Node* curr = head;
+	Node* Next = head;
+
+	while(curr){
+		Next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = Next;
+	}
+
+	return prev;
+}
+
+Node *getListAfterReverseOperation(Node *head, int n, int b[]){
+	// Approach: we will be using three pointers pre, curr, Next and modify the connections
+	// in such a manner that exactly k elements will be reversed
+	// T=O(m*n) S=O(1)
+	if(head == NULL || head->next == NULL) return head;
+	Node* dummy = new Node(0);
+	dummy->next = head;
+	Node* pre = dummy;
+	Node* curr;
+	Node* Next;
+
+	int len = length(head);
+
+	for(int i=0; i<n; i++){
+		int k = b[i];
+		if(len == 0) break;
+		if(len>=k){
+			curr = pre->next;
+			Next = curr->next;
+			if(k == 0) continue;
+			for(int j=1; j<k; j++){
+				curr->next = Next->next;
+				Next->next = pre->next;
+				pre->next = Next;
+				Next = curr->next;
+			}
+			len -= k;
+			pre = curr;
+		}
+		else if(len<k){
+			pre->next = reverse(pre->next);
+			len = 0;
+		}
+	}
+
+	return dummy->next;
+}
