@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+bool detectCycle(Node *head)
+{
+    // Approach 1: using hashmap we can store elements that has previously occured and can 
+    // compare with current element
+    // T=O(n) S=O(n)
+    unordered_map<Node*, int> umap;
+
+    while(head){
+        if(umap.find(head) != umap.end()) return true;
+        umap[head]++;
+        head = head->next;
+    }
+    return false;
+
+	// Approach 2: Floyd Cycle Detection Algorithm, two pointers can be used one will traverse linearly and other will traverse two node at a time
+    // T=O(n) S=O(1)
+    Node* slow = head;
+    Node* fast = head;
+
+    while(fast && fast->next){
+        fast = fast->next->next;
+        slow = slow->next;
+        if(fast == slow) return true;
+    }
+    return false;
+}
