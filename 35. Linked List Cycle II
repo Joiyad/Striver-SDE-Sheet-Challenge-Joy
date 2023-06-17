@@ -1,5 +1,9 @@
 Node *firstNode(Node *head)
 {
+    // brute force: we can use extra space map to store the elements and if we found that element again that means cycle start from 
+    // that element
+
+    // Optimal approach
     // we will iterate over the linked list using two pointers fast and slow 
     // when both will meet at same node this means cycle exist
     // to find node we will set slow = head and start iterating again till slow and fast become equal
