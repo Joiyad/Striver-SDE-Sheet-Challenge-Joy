@@ -1,0 +1,45 @@
+ int length(Node *head){
+      int count = 0;
+      while(head){
+           head = head->next;
+           count++;
+      }
+      return count;
+ }
+
+Node *rotate(Node *head, int k) {
+     // brute force: we can modify relations one by one but that will lead to time complexity of n*m where n
+     // is the length of linked list.
+
+
+     // Optimized Approach: here we will iterate using two pointers and our slow pointer will point
+     // to the node that should act as last node and we will modify relations by fast pointer pointing to head
+     // T=O(N) S=O(1)
+     if(head == NULL || head->next == NULL) return head;
+     Node* slow = head;
+     Node* fast = head;
+
+     // step1: find the length
+     int len = length(head);
+     // step2: calculate the value of k that need to be shifted
+     k = k%len;
+     if(k == 0) return head;
+
+     // move fast pointer ahead by k
+     while(k--){
+          fast = fast->next;
+     }
+
+     // move fast and slow pointer till fast's next reaches NULL
+     while(fast->next){
+          slow = slow->next;
+          fast = fast->next;
+     }
+
+     // modify relations and store slow's next
+     Node* temp = slow->next;
+     slow->next = NULL;
+     fast->next = head;
+     // return slow's next
+     return temp;
+}
