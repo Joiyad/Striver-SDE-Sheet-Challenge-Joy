@@ -1,0 +1,70 @@
+LinkedListNode<int> *cloneRandomList(LinkedListNode<int> *head)
+{
+     // using hashmap we will store the copies of nodes in map and use them later for
+     // recreating the linked list
+
+     unordered_map<LinkedListNode<int>*, LinkedListNode<int>*> umap;
+
+     LinkedListNode<int>* temp = head;
+     LinkedListNode<int>* newHead = NULL;
+     LinkedListNode<int>* newTail = newHead;
+     while(temp){
+         LinkedListNode<int> *n = new LinkedListNode<int>(temp->data);
+         umap[temp] = n;
+         
+         if(newHead == NULL){
+             newHead = n;
+             newTail = n;
+         } else {
+           newTail->next = n;
+           newTail = newTail->next;
+         }
+         temp = temp->next;
+     }
+
+     temp = head;
+
+     while(temp){
+         umap[temp]->random = umap[temp->random];
+         temp = temp->next;
+     }
+    
+    return newHead;
+
+    // Optimized approach: without using extra space
+    // step1: insert new nodes between nodes of original linked list
+    LinkedListNode<int> *temp = head;
+
+    while(temp){
+        LinkedListNode<int>* n = new LinkedListNode<int>(temp->data);
+        LinkedListNode<int>* temp2 = temp->next;
+        temp->next = n;
+        n->next = temp2;
+        temp = temp2;
+    }
+
+    // step2: assign random pointers
+    temp = head;
+    while(temp){
+        if(temp->random){
+            temp->next->random = temp->random->next;
+        }
+        temp = temp->next->next;
+    }
+
+    // step3: separate both linked lists
+    temp = head;
+    LinkedListNode<int> *dummy = new LinkedListNode<int> (0);
+    LinkedListNode<int> *newTail = dummy;
+    LinkedListNode<int> *front = temp;
+
+    while(temp){
+        front = temp->next->next;
+        newTail->next = temp->next;
+        temp->next = front;
+        newTail = newTail->next;
+        temp = front;
+    }
+
+    return dummy->next;
+}
