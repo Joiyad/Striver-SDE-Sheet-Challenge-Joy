@@ -1,0 +1,57 @@
+#include <bits/stdc++.h> 
+vector<vector<int>> findTriplets(vector<int>arr, int n, int K) {
+	// brute force: simply use 3 nested loops and find sum and using a set as duplicates need not
+	// to be stored
+	// T=O(n^3) S=O(1)
+	vector<vector<int>> ans;
+	for(int i=0; i<n; i++){
+		for(int j=i+1; j<n; j++){
+			for(int k=j+1; k<n; k++){
+				if(arr[i] + arr[j] + arr[k] == K){
+					vector<int> v;
+					v.push_back(arr[i]);
+					v.push_back(arr[j]);
+					v.push_back(arr[k]);
+					ans.push_back(v);
+				}
+			}
+		}
+	}
+
+	return ans;
+
+	// Optimized approach: since we are checking each and every triplet this is not required
+	// T=O(n^2) + (nlogn) S=O(1)
+
+	// Step 1: sort the array
+	sort(arr.begin(), arr.end());
+
+	// Step2: iterate through array
+	for(int i=0; i<n; i++){
+		// to avoid duplicates
+		if(i==0 || (i>0 && arr[i] != arr[i-1])){
+			// Step3: declare two pointers
+			int low = i+1;
+			int high = n-1;
+
+			while(low < high){
+				int sum = arr[i] + arr[low] + arr[high];
+				if(sum == K) {
+					vector<int> v;
+					v.push_back(arr[i]);
+					v.push_back(arr[low]);
+					v.push_back(arr[high]);
+					ans.push_back(v);
+					while(low<high && arr[low] == arr[low+1]) low++;
+					while(low<high && arr[high] == arr[high-1]) high--;
+					low++;
+					high--;
+				}
+				else if(sum > K) high--;
+				else low++;
+			}
+		}
+	}
+	return ans;
+
+}
