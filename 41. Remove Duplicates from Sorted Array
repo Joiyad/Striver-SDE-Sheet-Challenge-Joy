@@ -1,0 +1,9 @@
+int removeDuplicates(vector<int> &arr, int n) {
+	// Approach: since array is sorted that means duplicate element will come continuously
+	// we can use two pointer approach and store no. of duplicates in count;
+	int count = 0;
+	for(int i=1; i<n; i++){
+		if(arr[i] == arr[i-1]) count++;
+	}
+	return n-count;
+}
