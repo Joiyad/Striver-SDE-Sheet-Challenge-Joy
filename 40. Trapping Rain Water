@@ -1,0 +1,74 @@
+#include <bits/stdc++.h> 
+long getTrappedWater(long *arr, int n){
+    // brute force: the water trapped for a particular element depends on min of left maxm
+    // and right max
+    // T=O(n^2) S=O(1)
+    long ans = 0;
+    for(int i=0; i<n; i++){
+        int leftmax=0, rightmax=0;
+
+        int j = i;
+        while(j>=0){
+            leftmax = max(leftmax, (int)arr[j]);
+            j--;
+        }
+
+        j = i;
+        while(j<n){
+            rightmax = max(rightmax, (int)arr[j]);
+            j++;
+        }
+
+        ans += min(leftmax, rightmax) - arr[i];
+    }
+    return ans;
+
+    // Optimized approach: we can reduce time complexity by using space
+    // T=O(n) S=O(n)
+    vector<int> leftmax(n, 0);
+    vector<int> rightmax(n, 0);
+    long ans = 0;
+    leftmax[0] = arr[0];
+    rightmax[n-1] = arr[n-1];
+
+    for(int i=1; i<n; i++){
+        leftmax[i] = max(leftmax[i-1], (int)arr[i]);
+    }
+
+    for(int i=n-2; i>=0; i--){
+        rightmax[i] = max(rightmax[i+1], (int)arr[i]);
+    }
+
+    for(int i=0; i<n; i++){
+        ans += min(leftmax[i], rightmax[i]) - arr[i];
+    }
+
+    return ans;
+
+        // Best Approach: using two pointers
+        // T=O(n) S=O(1)
+        int left = 0, right = n-1;
+        long left_max = 0, right_max = 0;
+        long ans = 0;
+        while(left<right){
+            if(arr[left] < arr[right]){
+                if(arr[left] > left_max){
+                    left_max = arr[left];
+                }
+                else{
+                    ans += left_max - arr[left];
+                }
+                left++;
+            }
+            else{
+                if(arr[right] > right_max){
+                    right_max = arr[right];
+                }
+                else{
+                    ans += right_max - arr[right];
+                }
+                right--;
+            }
+        }
+        return ans;
+}
