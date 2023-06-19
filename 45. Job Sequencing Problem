@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+int jobScheduling(vector<vector<int>> &jobs)
+{
+    // here we will sort first according to profit as our priority is to maximize profit
+    // next we will find the maximum deadline
+    // store all the values corresponding to deadline array
+    // store profit
+    // T=O(nlogn)+O(n*k) where k is the maximum deadline and S=O(k)
+    sort(jobs.begin(), jobs.end(), [](vector<int> &a, vector<int> &b){
+        return a[1]>b[1];
+    });
+
+    int profit = 0;
+    int deadline = jobs[0][0];
+    int n = jobs.size();
+
+    for(int i=1; i<n; i++){
+        deadline = max(deadline, jobs[i][0]);
+    }
+
+    // create an array to store all deadlines
+    int slots[deadline+1];
+    for(int i=0; i<=deadline; i++) slots[i] = -1;
+
+    for(int i=0; i<n; i++){
+        for(int j=jobs[i][0]; j>0; j--){
+            if(slots[j] == -1){
+                slots[j] = i;
+                profit += jobs[i][1];
+                break;
+            }
+        }
+    }
+
+    return profit;
+}
