@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+vector<int> maximumMeetings(vector<int> &start, vector<int> &end) {
+    // Approach: The intution is meeting should end as early as possible so that we can 
+    // accomodate more meetings. We will sort according to end interval and keep track of 
+    // end of last interval in terms of limit
+    // T=O(n)+O(nlogn)+O(n) S=O(n)
+    vector<int> ans;
+    vector<vector<int>> temp;
+
+    int n = start.size();
+    for(int i=0; i<n; i++){
+        // start, end , and position
+        temp.push_back({start[i], end[i], i+1});
+    }
+
+    sort(temp.begin(), temp.end(), [](vector<int> &a, vector<int> &b){
+        //if end intervals are same then priority will be given to position
+        if(a[1] == b[1]) return  a[2]<b[2];
+        else return a[1]<b[1];
+    });
+
+    int limit = temp[0][1];
+    ans.push_back(temp[0][2]);
+    for(int i=1; i<n; i++){
+        if(temp[i][0] > limit){
+            ans.push_back(temp[i][2]);
+            limit = temp[i][1];
+        }
+    }
+
+    return ans;
+}
