@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+
+int findMinimumCoins(int amount) 
+{
+    // Approach: we can use greedy which states local best will lead to global best solution
+    int coins[] = {1, 2, 5, 10, 20, 50, 100, 500, 1000};
+    int ans = 0;
+    int i=8;
+    while(amount>0 && i>=0){
+        // if coins[i] > amount we can't pick that coin and move to next coin
+        if(amount < coins[i]){
+            i--;
+            continue;
+        }
+        ans++;
+        amount -= coins[i];
+    }
+    return ans;
+
+    // Approach: dp can be used for the same question but that will use extra space so here not preferred
+}
