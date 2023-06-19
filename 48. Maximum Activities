@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+
+int maximumActivities(vector<int> &start, vector<int> &finish) {
+    // similar question to n meetings we will follow same approach
+    // first store start and finish in an array combined and sort according to finish time
+    // T=O(nlogn)+O(n) S=O(n)
+    vector<pair<int, int>> activities;
+
+    int n = start.size();
+    for(int i=0; i<n; i++){
+        activities.push_back({start[i], finish[i]});
+    }
+
+    sort(activities.begin(), activities.end(), [](pair<int, int> &a, pair<int, int> &b){
+        return  a.second<b.second;
+    });
+
+    int limit = activities[0].second;
+    int ans = 1;
+
+    for(int i=1; i<n; i++){
+        // if there is no overlapping then activities can be performed
+        if(activities[i].first >= limit){
+            ans++;
+            limit = activities[i].second;
+        }
+    }
+    return ans;
+}
