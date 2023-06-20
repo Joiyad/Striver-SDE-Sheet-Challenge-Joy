@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+
+void solve(int ind, string &s, vector<string> &permutations){
+    // base case
+    if(ind == s.size()){
+        permutations.push_back(s);
+        return;
+    }
+
+    // try all possibilities
+    for(int i=ind; i<s.size(); i++){
+        swap(s[i], s[ind]);
+        solve(ind+1, s, permutations);
+        // backtrack
+        swap(s[i], s[ind]);
+    }
+}
+
+string kthPermutation(int n, int k) {
+    // Brute force : calculate all possible permutations and then return (k-1)th permutation
+    // T=O(n!*n) + O(nlogn) S=O(recursive stack space)
+    vector<string> permutations;
+    string s;
+    for(int i=1; i<=n; i++){
+        s.push_back(i+'0');
+    }
+
+    solve(0, s, permutations);
+
+    sort(permutations.begin(), permutations.end());
+    auto it = permutations.begin() + (k-1);
+    return *it;
+
+    // Optimal Approach: we will basic permutation like filling the empty boxes and calculating the
+    // no. that will be filled in  that box
+    // T=O(n)+O(n) S=O(n)
+    string s = "";
+    int fact = 1;
+    // store the numbers that we can use to form permutation
+    vector<int> numbers;
+    for(int i=1; i<n; i++){
+        fact *= i;
+        numbers.push_back(i);
+    }
+    numbers.push_back(n);
+    // 0 based indexing
+    k = k-1;
+
+    while(true){
+        s += to_string(numbers[k/fact]);
+        numbers.erase(numbers.begin()+k/fact);
+        if(numbers.size() == 0) break;
+
+        k %= fact;
+        fact /= numbers.size();
+    }
+    return s;
+}
