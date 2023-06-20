@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+void solve(int ind, int target, vector<int> &arr, vector<int> &v, vector<vector<int>> &ans){
+	// base case
+	if(target == 0){
+		ans.push_back(v);
+		return;
+	}
+
+	// try all possiblities
+	for(int i=ind; i<arr.size(); i++){
+		if(i>ind && arr[i] == arr[i-1]) continue;
+		if(arr[i]>target) break;
+		v.push_back(arr[i]);
+		solve(i+1, target-arr[i], arr, v, ans);
+		v.pop_back();
+	}
+}
+
+vector<vector<int>> combinationSum2(vector<int> &arr, int n, int target)
+{
+	// Here major objective is to not include duplicates and find combinational sum
+	// we can use for loop for this purpose in recursion and avoid duplicates.
+	vector<vector<int>> ans;
+	vector<int> v;
+
+	sort(arr.begin(), arr.end());
+	solve(0, target, arr, v, ans);
+	return ans;
+}
