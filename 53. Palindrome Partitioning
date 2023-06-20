@@ -1,0 +1,38 @@
+#include <bits/stdc++.h> 
+// function for palindrome
+bool isPalindrome(string s, int start, int end){
+    while(start<end){
+        if(s[start] != s[end]) return false;
+        start++;
+        end--;
+    }
+    return true;
+}
+
+// function for partitioning
+void solve(int ind, vector<vector<string>> &ans, vector<string> &v, string &s){
+    // base case
+    if(ind == s.size()){
+        ans.push_back(v);
+        return;
+    }
+
+    // try all possibilities
+    for(int i=ind; i<s.size(); i++){
+        if(isPalindrome(s, ind, i)){
+            v.push_back(s.substr(ind, i-ind+1));
+            solve(i+1, ans, v, s);
+            v.pop_back();
+        }
+    }
+}
+
+vector<vector<string>> partition(string &s) 
+{
+    // Approach: Make all possible partitions and check palindrome for each substring
+    // T=O(2^n*k*(n/2)) where n = length of string S=O(recursion stack space)
+    vector<vector<string>> ans;
+    vector<string> v;
+    solve(0, ans, v, s);
+    return ans;
+}
