@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+void solve(int i, int sum, vector<int> &ans, vector<int> &num){
+    // base case
+    if(i == num.size()){
+        ans.push_back(sum);
+        return;
+    }
+
+    // try all possibilities
+    solve(i+1, sum, ans, num);
+    solve(i+1, sum+num[i], ans, num);
+}
+
+vector<int> subsetSum(vector<int> &num)
+{
+    // Approach: since we have to find all possible subset sums then this gives a hint of recursion
+    // we have to call recursion for either picking or not picking an element
+    // T=O(2^n)+O(nlogn) S=O(n) recursive stack
+    vector<int> ans;
+    solve(0, 0, ans, num);
+    sort(ans.begin(), ans.end());
+    return ans;
+}
