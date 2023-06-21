@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+void solve(int ind, string &s, vector<string> &ans){
+    // base case
+    if(ind == s.size()){
+        ans.push_back(s);
+        return;
+    }
+
+    // try all ways
+    for(int i=ind; i<s.size(); i++){
+        swap(s[i], s[ind]);
+        solve(ind+1, s, ans);
+        // backtrack
+        swap(s[i], s[ind]);
+    }
+}
+
+vector<string> findPermutations(string &s) {
+    // we have to find all permutations this gives me a hint of recursion
+    // we will swap two characters one by one and backtrack them.
+    // store them in a array and return
+    // T=O(n!*n) S=O(1)
+    vector<string> ans;
+    solve(0, s, ans);
+    return ans;
+}
