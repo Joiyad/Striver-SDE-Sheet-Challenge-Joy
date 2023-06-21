@@ -1,0 +1,37 @@
+#include <bits/stdc++.h> 
+bool isSafe(int ind, int col[], vector<vector<int>> &mat, int n, int color){
+    // if node is not same and connected and color is same then return false
+    for(int k=0; k<n; k++){
+        if(k!=ind && mat[k][ind] == 1 && col[k] == color){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool solve(int ind, int col[], vector<vector<int>> &mat, int m, int n){
+    // base case
+    if(ind == n) return true;
+
+    // fill all nodes
+    for(int i=1; i<=m; i++){
+        if(isSafe(ind, col, mat, n, i)){
+            col[ind] = i;
+            if(solve(ind+1, col, mat, m, n)) return true;
+            col[ind] = 0;
+        }
+    }
+
+    return false;
+}
+
+string graphColoring(vector<vector<int>> &mat, int m) {
+    // Approach: we will be fill a color and check if any of the connected nodes have same
+    // color or not if yes then return false.
+    // T=O(n^m) S=O(N)
+    int n = mat.size();
+    int col[n] = {0};
+
+    if(solve(0, col, mat, m, n)) return "YES";
+    return "NO";
+}
