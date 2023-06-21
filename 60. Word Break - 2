@@ -1,0 +1,42 @@
+#include <bits/stdc++.h> 
+
+void solve(int ind, string t, string &s, unordered_map<string, int> &umap, vector<string> &ans){
+    //base case
+    if(ind == s.length()){
+        ans.push_back(t);
+        return;
+    }
+
+    string a;
+    for(int i=ind; i<s.length(); i++){
+        a += s[i];
+        // if we find the word in dictionary add it to t which is sentence
+        if(umap.find(a) != umap.end()){
+            // for the first word
+            if(t.length() == 0){
+                solve(i+1, t+a, s, umap, ans);
+            }
+            // for rest of the words
+            else{
+                solve(i+1, t+" "+a, s, umap, ans);
+            }
+        }
+    }
+}
+
+vector<string> wordBreak(string &s, vector<string> &dictionary)
+{
+    // we will store all words in map so that searching will be easier
+    // simply iterate and check if the words are present store them
+    // T=O(k^n) S=O(n)+recursive stack space
+    unordered_map<string, int> umap;
+
+    for(auto it:dictionary){
+        umap[it]++;
+    }
+
+    vector<string> ans;
+    string t;
+    solve(0, t, s, umap, ans);
+    return ans;
+}
