@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+
+int smallerElements(int mid, vector<int> &row, int m){
+    int l = 0;
+    int h = m-1;
+
+    while(l <= h){
+        int middle = (l+h)/2;
+        if(row[middle] <= mid) l = middle+1;
+        else h = middle-1;
+    }
+    return l;
+}
+
+int getMedian(vector<vector<int>> &matrix)
+{
+    // brute force: simply store elements in single array and return middle element
+    vector<int> v;
+    int n = matrix.size();
+    int m = matrix[0].size();
+
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            v.push_back(matrix[i][j]);
+        }
+    }
+
+    sort(v.begin(), v.end());
+    return v[m*n/2];
+
+    // Better approach: sorted gives us a hint of binary search
+    // T=O(logn*n*m) S=O(1)
+    int low = 0;
+    int high = 1e9;
+    int n = matrix.size();
+    int m = matrix[0].size();
+
+    while(low <= high){
+        int mid = (low+high)/2;
+        int count = 0;
+        for(int i=0; i<n; i++){
+            count += smallerElements(mid, matrix[i], m);
+        }
+        if(count <= (n*m)/2) low = mid+1;
+        else high = mid-1;
+    }
+
+    return low;
+}
