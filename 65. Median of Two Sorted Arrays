@@ -1,0 +1,82 @@
+// function for merge sort
+double merge(vector<int> &a, vector<int> &b){
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int n = a.size();
+	int m = b.size();
+	int arr[m+n];
+	
+	while(i<n && j<m){
+		if(a[i] < b[j]){
+			arr[k] = a[i];
+			i++;
+			k++;
+		}
+		else{
+			arr[k] = b[j];
+			j++;
+			k++;
+		}
+	}
+
+	while(i<n){
+		arr[k] = a[i];
+		i++;
+		k++;
+	}
+
+	while(j<m){
+		arr[k] = b[j];
+		j++;
+		k++;
+	}
+
+	if((m+n)%2 != 0) return (double)arr[((m+n+1)/2)-1];
+	else return ((float)arr[((m+n)/2)-1] + (float)arr[((m+n)/2)])/2;
+}
+
+// Function for binary search
+double solve(vector<int> &a, vector<int> &b){
+	int n = a.size();
+	int m = b.size();
+
+	int low = 0;
+	int medianIndex = ((m+n+1)/2);
+	int high = n;
+
+	while(low<=high){
+		// we will make cuts in such a manner that left side contains elements smaller than right side
+		int cut1 = (low+high)>>1;
+		int cut2 = medianIndex-cut1;
+
+		int l1 = cut1 == 0 ? INT_MIN : a[cut1-1];
+		int l2 = cut2 == 0 ? INT_MIN : b[cut2-1];
+		int r1 = cut1 == n ? INT_MAX : a[cut1];
+		int r2 = cut2 == m ? INT_MAX : b[cut2];
+
+		// if these conditions are satisfied that means we have successfully made cuts that divide 
+		// given arrays into two partitions
+		if(l1<=r2 && l2<=r1){
+			if((m+n)%2 != 0) return max(l1, l2);
+			else return (max(l1,l2)+min(r1, r2))/2.0;
+		}
+		else if(l1>l2) high = cut1-1;
+		else low = cut1+1;
+	}
+	return 0.0;
+}
+
+double median(vector<int>& a, vector<int>& b) {
+	// Approach 1: since both arrays are sorted we can merge them using merge sort
+	// we will use extra space for storing merged array
+	// T=O(m+n) S=O(m+n)
+	return merge(a, b);
+
+	// Approach 2: binary search
+	// T=O(min(logm, logn)) S=O(1)
+	int n = a.size();
+	int m = b.size();
+	if(n>m) return solve(a, b);
+	else return solve(b, a);
+}
