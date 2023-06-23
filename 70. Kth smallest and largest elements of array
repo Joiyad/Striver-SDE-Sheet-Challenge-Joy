@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+vector<int> kthSmallLarge(vector<int> &arr, int n, int k)
+{
+	// Brute force: using sorting
+	// T=O(nlogn) S=O(1)
+	// sort(arr.begin(), arr.end());
+	// vector<int> ans;
+	// ans.push_back(arr[k-1]);
+	// ans.push_back(arr[n-k]);
+	// return ans;
+
+	// Approach 2: using heap
+	T=O(k + (n-k)*logk) S=O(k)
+	priority_queue<int> pqi;
+	priority_queue<int, vector<int>, greater<int>> pqg;
+
+	for(int i=0; i<n; i++){
+		pqi.push(arr[i]);
+		pqg.push(arr[i]);
+	}
+
+	k = k-1;
+	while(k--){
+		pqg.pop();
+		pqi.pop();
+	}
+
+	return {pqg.top(), pqi.top()};
+}
