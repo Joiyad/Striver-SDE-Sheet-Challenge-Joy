@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+bool isPossible(vector<int> &time, long long mid, int n, int m){
+	long long count = 1;
+	long long sum = 0;
+	for(int i=0; i<m; i++){
+		if(sum + time[i] > mid){
+			count++;
+			// if no. of days exceed given limit or given element is greater than mid
+			if(count>n || time[i]>mid) return false;
+			else sum = time[i];
+		}
+		else {
+			sum += time[i];
+		}
+	}
+	return true;
+}
+
+
+long long ayushGivesNinjatest(int n, int m, vector<int> time) 
+{	
+	// Approach: using binary search
+	// T=O(mlogm) S=O(1)
+	// case 1: we allot smallest chapter on day 1
+	long long low = time[0];
+	// case 2: we allot all chapters on day 1
+	long long high = 0;
+	long long ans = -1;
+
+	for(int i=0; i<m; i++){
+		high += time[i];
+		if(low < time[i]) low = time[i];
+	}
+
+	while(low <= high){
+		long long mid = (low+high)>>1;
+		// check the possiblility of partition 
+		if(isPossible(time, mid, n, m)){
+			ans = mid;
+			high = mid-1;
+		}
+		else low = mid+1;
+	}
+
+	return ans;
+}
