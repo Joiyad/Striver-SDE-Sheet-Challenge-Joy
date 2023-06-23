@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+bool isPossible(vector<int> &positions, int n, int c, int dis){
+	int player = 1;
+	int last_pos = positions[0];
+	for(int i=1; i<n; i++){
+		if(positions[i]-last_pos>=dis){
+			player++;
+			last_pos = positions[i];
+		}
+		if(player >= c) return true;
+	}
+	return false;
+}
+
+int chessTournament(vector<int> positions , int n ,  int c){
+	// Approach: binary search
+	int low = 1;
+	sort(positions.begin(), positions.end());
+	int high = positions[n-1]-positions[0];
+	int ans = -1;
+
+	while(low <= high){
+		int mid = (low+high)>>1;
+
+		if(isPossible(positions, n, c, mid)){
+			ans = mid;
+			low = mid+1;
+		}
+		else high = mid-1;
+	}
+
+	return ans;
+}
