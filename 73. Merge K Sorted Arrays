@@ -1,0 +1,63 @@
+#include <bits/stdc++.h> 
+// Function for merging two arrays using merge sort
+void merge(vector<int> &a, vector<int> &b){
+    int i=0;
+    int j=0;
+    vector<int> temp;
+
+    while(i<a.size() && j<b.size()){
+        if(a[i] <= b[j]){
+            temp.push_back(a[i]);
+            i++;
+        }
+        else{
+            temp.push_back(b[j]);
+            j++;
+        }
+    }
+
+    while(i<a.size()){
+        temp.push_back(a[i]);
+        i++;
+    }
+
+    while(j<b.size()){
+        temp.push_back(b[j]);
+        j++;
+    }
+
+    a.resize(temp.size());
+    for(int k=0; k<a.size(); k++){
+        a[k] = temp[k];
+    }
+}
+
+vector<int> mergeKSortedArrays(vector<vector<int>>&kArrays, int k)
+{
+    // Approach 1: using merge sort
+    // T=O(k*nlogn) S=O(n)
+    vector<int> ans;
+
+    // for(int i=0; i<k; i++){
+    //     merge(ans, kArrays[i]);
+    // }
+
+    // return ans;
+
+    // Approach 2: using heap, push all element in min heap and copy in array
+    // T=O(k*logk)+O(n) S=O(n)
+    priority_queue<int, vector<int>, greater<int>> pq;
+
+    for(int i=0; i<k; i++){
+        for(int j=0; j<kArrays[i].size(); j++){
+            pq.push(kArrays[i][j]);
+        }
+    }
+
+    while(!pq.empty()){
+        ans.push_back(pq.top());
+        pq.pop();
+    }
+
+    return ans;
+}
