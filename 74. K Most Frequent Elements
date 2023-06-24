@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+vector<int> KMostFrequent(int n, int k, vector<int> &arr)
+{
+    // Approach: using heap and hashmap
+    // T=O(n)+O(k)+O(nlogn) S=O(n)
+    priority_queue<pair<int, int>> pq;
+    unordered_map<int, int> umap;
+
+    // step 1: insert all elements in hashmap so that we can get count of each element
+    for(int i=0; i<n; i++){
+        umap[arr[i]]++;
+    }
+
+    // step2: insert all elements in priority queue so that all elements are in decreasing order of their count
+    for(auto it: umap){
+        pq.push({it.second, it.first});
+    }
+
+    vector<int> ans;
+    // store ans
+    while(k--){
+        ans.push_back(pq.top().second);
+        pq.pop();
+    }
+
+    // since answer is required in sorted order sort it
+    sort(ans.begin(), ans.end());
+    return ans;
+    
+}
