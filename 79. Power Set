@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+void solve(int i, vector<int> &v, vector<int> &temp, vector<vector<int>> &ans){
+    // base case
+    if(i == v.size()){
+        sort(temp.begin(), temp.end());
+        ans.push_back(temp);
+        return;
+    }
+
+    // try all possibilities
+    temp.push_back(v[i]);
+    solve(i+1, v, temp, ans);
+    // backtrack
+    temp.pop_back();
+    solve(i+1, v, temp, ans);
+}
+
+vector<vector<int>> pwset(vector<int>v)
+{
+    // Approach 1: using recursion since we have to find all subsets
+    // T=O(2^n) S=O(n)
+    vector<vector<int>> ans;
+    vector<int> temp;
+    solve(0, v, temp, ans);
+    return ans;
+}
