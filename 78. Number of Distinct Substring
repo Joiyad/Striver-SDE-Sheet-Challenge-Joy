@@ -46,6 +46,6 @@ int distinctSubstring(string &word) {
             node = node->get(word[j]);
         }
     }
-    // empty string is also included
+    // empty string is not included
     return count;
 }
