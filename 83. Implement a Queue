@@ -1,0 +1,46 @@
+#include <bits/stdc++.h> 
+class Queue {
+private:
+    int *arr;
+    int head;
+    int tail;
+    int capacity;
+
+public:
+    Queue() {
+        capacity = 10001;
+        arr = new int[capacity];
+        tail = 0;
+        head = 0;
+    }
+
+    /*----------------- Public Functions of Queue -----------------*/
+
+    bool isEmpty() {
+        // Implement the isEmpty() function
+        return (tail == head);
+    }
+
+    void enqueue(int data) {
+        if(tail != capacity) arr[tail++] = data;
+    }
+
+    int dequeue() {
+        if(tail == head) return -1;
+        else{
+            int temp = arr[head++];
+            if(head == tail){
+                head = 0;
+                tail = 0;
+            }
+            return temp;
+        }
+    }
+
+    int front() {
+        if(head == tail){
+            return -1;
+        }
+        return arr[head];
+    }
+};
