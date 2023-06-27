@@ -1,0 +1,43 @@
+#include <bits/stdc++.h> 
+void sortedInsert(stack<int> &stack, int num){
+	// base case
+	if(stack.empty() || (!stack.empty() && stack.top()<num)){
+		stack.push(num);
+		return;
+	}
+
+	int nn = stack.top();
+	stack.pop();
+
+	sortedInsert(stack, num);
+	stack.push(nn);
+}
+
+void sortStack(stack<int> &stack)
+{
+	// Brute force
+	// T=O(n) S=O(n)
+	vector<int> temp;
+	while(!stack.empty()){
+		temp.push_back(stack.top());
+		stack.pop();
+	}
+
+	sort(temp.begin(), temp.end());
+
+	for(int i=0; i<temp.size(); i++){
+		stack.push(temp[i]);
+	}
+
+	// Recursive Approach
+	// base case
+	if(stack.empty()){
+		return;
+	}
+
+	int num = stack.top();
+	stack.pop();
+
+	sortStack(stack);
+	sortedInsert(stack, num);
+}
