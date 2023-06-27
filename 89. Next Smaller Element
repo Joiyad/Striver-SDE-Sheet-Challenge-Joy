@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+
+vector<int> nextSmallerElement(vector<int> &arr, int n)
+{
+    // Brute force: using nested loops
+    // T=O(n^2) S=O(1)
+    vector<int> ans;
+    for(int i=0; i<n; i++){
+        bool flag = false;
+        for(int j=i+1; j<n; j++){
+            if(arr[i] > arr[j]){
+                ans.push_back(arr[j]);
+                flag = true;
+                break;
+            }
+        }
+        if(flag == false) ans.push_back(-1);
+    }
+    return ans;
+
+    // Approach: using stack
+    // T=O(n) S=O(n)
+    stack<int> s;
+    s.push(-1);
+    vector<int> ans(n);
+
+    for(int i=n-1; i>=0; i--){
+        while(!s.empty() && s.top()>=arr[i]){
+            s.pop();
+        }
+        if(s.empty()) ans[i] = -1;
+        else ans[i] = s.top();
+        s.push(arr[i]);
+    }
+    return ans;
+}
