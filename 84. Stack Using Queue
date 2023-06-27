@@ -1,0 +1,65 @@
+#include <bits/stdc++.h> 
+// Intution is that we insert in a queue and copy remaining element from other queue
+// ultimately we see the numbers are stored in last in first order manner
+
+class Stack {
+	private:
+        queue<int> q1;
+        queue<int> q2;
+
+   public:
+    Stack() {
+    }
+
+    /*----------------- Public Functions of Stack -----------------*/
+
+    int getSize() {
+        return q1.size() + q2.size();
+    }
+ 
+    bool isEmpty() {
+        if(q1.size() == 0 && q2.size() == 0) return true;
+        return false;
+    }
+
+    void push(int element) {
+        if(q1.empty()){
+            q1.push(element);
+            while(!q2.empty()){
+                q1.push(q2.front());
+                q2.pop();
+            }
+        }
+        else{
+            q2.push(element);
+            while(!q1.empty()){
+                q2.push(q1.front());
+                q1.pop();
+            }
+        }
+    }
+
+    int pop() {
+        if(!q1.empty()){
+            int ans = q1.front();
+            q1.pop();
+            return ans;
+        }
+        else if(!q2.empty()){
+            int ans = q2.front();
+            q2.pop();
+            return ans;
+        }
+        else return -1;
+    }
+
+    int top() {
+        if(!q1.empty()){
+            return q1.front();
+        }
+        else if(!q2.empty()){
+            return q2.front();
+        }
+        else return -1;
+    }
+};
