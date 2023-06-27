@@ -1,0 +1,50 @@
+#include <bits/stdc++.h> 
+vector<int> slidingWindowMaximum(vector<int> &nums, int &k)
+{
+    // Approach: sliding window algorithm
+    // T=O(n*k) S=O(k)
+    // vector<int> window;
+    // int n = nums.size();
+    // vector<int> ans;
+
+    // int i=0;
+    // while(i<k){
+    //     window.push_back(nums[i]);
+    //     i++;
+    // }
+
+    // for(int j=k; j<n; j++){
+    //     int maxm = INT_MIN;
+    //     for(int l=0; l<k; l++){
+    //         maxm = max(maxm, window[l]);
+    //     }
+    //     ans.push_back(maxm);
+    //     window.erase(window.begin(), window.begin()+1);
+    //     window.push_back(nums[j]);
+    // }
+
+    // // for last element
+    // int maxm = INT_MIN;
+    // for(int l=0; l<k; l++){
+    //     maxm = max(maxm, window[l]);
+    // }
+    // ans.push_back(maxm);
+
+    // return ans;
+
+    // Optimized approach: using double ended queue
+    // T=O(n) S=O(n)
+    deque<int> dq;
+    vector<int> ans;
+
+    for(int i=0; i<nums.size(); i++){
+        // check for bounds
+        if(!dq.empty() && dq.front() == i-k) dq.pop_front();
+        while(!dq.empty() && nums[dq.back()] < nums[i]) dq.pop_back();
+
+        dq.push_back(i);
+        if(i>=k-1) ans.push_back(nums[dq.front()]);
+    }
+
+    return ans;
+}
