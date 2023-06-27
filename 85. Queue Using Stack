@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+// Intution is we will store all elements in stack 1 but when we insert we will reverse
+// the order using stack 2 of elements and again store in stack 1
+
+
+class Queue {
+    stack<int> st1;
+    stack<int> st2;
+    
+    public:
+    Queue() {
+        // Initialize your data structure here.
+    }
+
+    void enQueue(int val) {
+        while(!st1.empty()){
+            st2.push(st1.top());
+            st1.pop();
+        }
+
+        st1.push(val);
+
+        while(!st2.empty()){
+            st1.push(st2.top());
+            st2.pop();
+        }
+    }
+
+    int deQueue() {
+        if(!st1.empty()){
+            int ans =  st1.top();
+            st1.pop();
+            return ans;
+        }
+        else return -1;
+    }
+
+    int peek() {
+        if(!st1.empty()){
+            return st1.top();
+        }
+        else return -1;
+    }
+
+    bool isEmpty() {
+        if(st1.empty() && st2.empty()) return true;
+        return false;
+    }
+};
