@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+vector<int> findSpans(vector<int> &price) {
+    // Brute force: using nested loops
+    // T=O(n^2) S=O(1)
+    int n = price.size();
+    vector<int> ans;
+    for(int i=0; i<n; i++){
+        int count = 1;
+        for(int j=0; j<i; j++){
+            if(price[i] >= price[j]) count++;
+            else count = 1;
+        }
+        ans.push_back(count);
+    }
+    return ans;
+
+    // Optimized approach: using stack
+    // T=O(n) S=O(n)
+    stack<int> st;
+    st.push(-1);
+    vector<int> ans;
+
+    for(int i=0; i<n; i++){
+        while(st.top() != -1 && price[st.top()] <= price[i]) st.pop();
+        if(st.top() == -1) ans.push_back(i+1);
+        else ans.push_back(i-st.top());
+        st.push(i);
+    }
+
+    return ans;
+}
