@@ -1,0 +1,69 @@
+#include <bits/stdc++.h> 
+vector<int> maxMinWindow(vector<int> a, int n) {
+    // Brute force: using nested loops
+    // T=O(n^3) S=O(1)
+    // vector<int> ans;
+
+    // // outer loop for window size
+    // for(int i=1; i<=n; i++){
+    //     int maxOfMin = INT_MIN;
+    //     // traversing through all windows of size i
+    //     for(int j=0; j<=n-i; j++){
+    //         int minimum = a[j];
+            // iterate over window
+    //         for(int k=1; k<i; k++){
+    //             if(a[j+k] < minimum) minimum = a[j+k];
+    //         }
+    //         if(minimum > maxOfMin){
+    //             maxOfMin = minimum;
+    //         }
+    //     }
+    //     ans.push_back(maxOfMin);
+    // }
+    // return ans;
+
+    // Optimized approach: using stack
+    // T=O(n) S=O(n)
+    stack<int> st;
+    int left[n+1];
+    int right[n+1];
+
+    // fill left and right with initial values
+    for(int i=0; i<=n; i++){
+        left[i] = -1;
+        right[i] = n;
+    }
+
+    // fill right with prev greater element
+    for(int i=0; i<n; i++){
+        while(!st.empty() && a[st.top()] >= a[i]) st.pop();
+        if(!st.empty()) left[i] = st.top();
+        st.push(i);
+    }
+
+    // empty stack
+    while(!st.empty()) st.pop();
+
+    // fill right with next greater element
+    for(int i=n-1; i>=0; i--){
+        while(!st.empty() && a[st.top()] >= a[i]) st.pop();
+        if(!st.empty()) right[i] = st.top();
+        st.push(i);
+    }
+
+    vector<int> ans(n+1, INT_MIN);
+
+    for(int i=0; i<n; i++){
+        int len = right[i]-left[i]-1;
+        ans[len] = max(ans[len], a[i]);
+    }
+
+    // for remaining entries in ans
+    for(int i=n-1; i>=1; i--){
+        ans[i] = max(ans[i], ans[i+1]);
+    }
+
+    ans.erase(ans.begin(), ans.begin()+1);
+
+    return ans;
+}
