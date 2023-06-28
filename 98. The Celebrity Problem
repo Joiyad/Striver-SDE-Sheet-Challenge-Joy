@@ -1,0 +1,87 @@
+#include <bits/stdc++.h> 
+/*
+	This is signature of helper function 'knows'.
+	You should not implement it, or speculate about its implementation.
+
+	bool knows(int A, int B); 
+	Function 'knows(A, B)' will returns "true" if the person having
+	id 'A' know the person having id 'B' in the party, "false" otherwise.
+*/
+
+int findCelebrity(int n) {
+ 	// Brute force
+	// T=O(n^2) S=O(1)
+	int ans = -1;
+	int i, j;
+
+	// case 1: celebrity knows no one
+	 for(i=0; i<n; i++){
+		 for(j=0; j<n; j++){
+			 if(knows(i, j)) break;
+		 }
+		 if(j == n) ans = i;
+	 }
+
+	 // case 2: everyone don't know celebrity
+	 for(i=0; i<n; i++){
+		 if(i!=ans && knows(i, ans) == false) return -1;
+	 }
+
+	 return ans;
+
+
+	// Optimized approach: using stack
+	// T=O(n) S=O(n)
+	int ans = -1;
+	stack<int> st;
+
+	// push all elements
+	for(int i=0; i<n; i++) st.push(i);
+
+	// pop and check until only one element left
+	while(st.size()>1){
+		int a = st.top();
+		st.pop();
+		int b = st.top();
+		st.pop();
+
+		if(knows(a, b)) st.push(b);
+		else st.push(a);
+	}
+
+	ans = st.top();
+	
+	// verify ans
+	int count = 0;
+	for(int i=0; i<n; i++){
+		if(knows(ans, i) == false) count++;
+	}
+	if(count != n) return -1;
+
+	count = 0;
+	for(int i=0; i<n; i++){
+		if(knows(i, ans)) count++;
+	}
+	// n-1 because self to self is 0
+	if(count != n-1) return -1;
+
+	return ans;
+
+	// Two Pointer Approach
+	// T=O(n) S=O(1)
+	int start = 0;
+	int end = n-1;
+
+	while(start<end){
+		if(knows(start, end)) start++;
+		else end--;
+	}
+
+	for(int i=0; i<n; i++){
+		if(i!=start){
+			if(knows(i, start) == false || knows(start, i) ==  true) return -1;
+		}
+	}
+
+	return start;
+}
