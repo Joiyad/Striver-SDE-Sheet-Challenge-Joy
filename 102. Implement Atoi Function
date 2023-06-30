@@ -1,0 +1,15 @@
+#include <bits/stdc++.h> 
+int atoi(string s) {
+    // T=O(n) S=O(1)
+    int ans = 0;
+    
+    // make the number from string
+    for(auto i: s){
+        if(isdigit(i)){
+            ans = (ans*10) + (i-'0');
+        }
+    }
+
+    // check the sign of number
+    return s[0] == '-'? -ans : ans;
+}
