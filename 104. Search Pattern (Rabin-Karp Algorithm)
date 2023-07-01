@@ -1,0 +1,77 @@
+int calculateHash(string s, int mod){
+	int hash = 0;
+	for(int i=0; i<s.size(); i++){
+		hash = hash*pow(10, i) + hash;
+		hash %= mod;
+	}
+	return hash;
+}
+
+vector<int> stringMatch(string text, string pattern) {
+	// Sliding window: simply check each substring and compare to window
+	// T=O(n-m+1) S=O(1)
+		vector<int> ans;
+        
+        int n = text.size();
+		int m = pattern.size();
+        for(int i=0; i<=n-m; i++)
+        {
+            string temp = text.substr(i, pattern.size());
+            if(pattern==temp)
+                ans.push_back(i+1);
+        }
+        return ans;
+
+	// Rabin Carp Algorithm: calculate hash and use sliding window
+	// T=O(n-m+1) S=O(1)
+	int n = text.size();
+	int m = pattern.size();
+	int mod = INT_MAX;
+	int hashP = calculateHash(pattern, mod);
+	vector<int> ans;
+
+	for(int i=0; i<=n-m; i++){
+		if(hashP == calculateHash(text.substr(i, m), mod) && text.substr(i, m) == pattern){
+			ans.push_back(i+1);
+		}
+	}
+
+	return ans;
+
+	// KMP Algorithm: we will make longest prefix table or pie table and check if some part 
+	// of pattern is repeating or not
+	// T=O(m+n) S=O(1)
+	int n = pattern.size();
+	vector<int> pi(n, 0);
+
+	// fill the lps table
+	for(int i=1; i<n; i++){
+		int j=pi[i-1];
+		// if pattern characters are not repeating
+		while(j>0 && pattern[i] != pattern[j]) j=pi[j-1];
+
+		// if repeating
+		if(pattern[i] == pattern[j]) j++;
+		pi[i]=j;
+	}
+
+	vector<int> ans;
+
+	int i=0, j=0;
+	while(i<text.size()){
+		if(text[i] == pattern[j]){
+			i++;
+			j++;
+		}
+		else{
+			if(j!=0) j=pi[j-1];
+			else i++;
+		}
+		if(j==pattern.size()){
+			ans.push_back(i-pattern.size()+1);
+			j=pi[j-1];
+		}
+	}
+
+	return ans;
+}
