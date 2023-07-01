@@ -1,0 +1,55 @@
+// function for constructing z array
+void construct(string str, int Z[]){
+	int left=0, right=0, k;
+	int n = str.size();
+
+	for(int i=1; i<n; i++){
+		if(i>right){
+			left=right=i;
+			// check matching
+			while(right<n && str[right-left] == str[right]){
+				right++;
+			}
+			Z[i] = right-left;
+			right--;
+		}
+		else{
+			k = i-left;
+			if(Z[k] < right-i+1){
+				Z[i] = Z[k];
+			}
+			else{
+				left = i;
+				while(right<n && str[right-left] == str[right]) right++;
+				Z[i] = right-left;
+				right--;
+			}
+		}
+	}
+}
+
+int zAlgorithm(string s, string p, int n, int m)
+{
+	// Z Algorithm
+	// T=O(m+n) S=O(n+m)
+	int count = 0;
+
+	// step1: concate both strings
+	string str = p + "$" + s;
+	int l = str.length();
+
+	// step2: construct Z array
+	int Z[l];
+	construct(str, Z);
+
+	// step 3: iterate over str
+	for(int i=0; i<l; i++){
+		if(Z[i] == p.length()){
+			count++;
+		}
+	}
+
+	// step 4: return
+	return count;
+
+}
