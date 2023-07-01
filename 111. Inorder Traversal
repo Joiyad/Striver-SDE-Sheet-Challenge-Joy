@@ -8,13 +8,14 @@ void inorder(TreeNode* root, vector<int> &ans){
     // recursive call for left sub tree
     inorder(root->left, ans);
     ans.push_back(root->data);
+    // recursive call for right sub tree
     inorder(root->right, ans);
 }
 
 vector<int> getInOrderTraversal(TreeNode *root)
 {
     // inorder traversal: left -> root -> right
-    // T=O(height) S=O(1)
+    // T=O(n) S=O(1)
     vector<int> ans;
     inorder(root, ans);
     return ans;
