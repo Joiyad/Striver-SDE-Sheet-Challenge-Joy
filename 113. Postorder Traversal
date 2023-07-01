@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+// function for postorder traversal
+void postorder(TreeNode* root, vector<int> &ans){
+    // base case
+    if(root == NULL) return;
+    
+    // recursive call for left sub tree
+    postorder(root->left, ans);
+    // recursive call for right sub tree
+    postorder(root->right, ans);
+    ans.push_back(root->data);
+}
+
+vector<int> getPostOrderTraversal(TreeNode *root)
+{
+    // Postorder: left->right->root
+    // T=O(n) S=O(1)
+    vector<int> ans;
+    postorder(root, ans);
+    return ans;
+}
