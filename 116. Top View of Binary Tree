@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+
+vector<int> getTopView(TreeNode<int> *root) {
+    // Approach: draw vertical lines and in a line we will be able to see only one node
+    // from top view, only change from previous problem is to check that line and val pair
+    // should not be updated once it is stored in map
+    // T=O(n) S=O(n)
+    vector<int> ans;
+    if(root == NULL) return ans;
+
+    // map of line and corresponding node value
+    map<int, int> umap;
+    // store node and line number
+    queue<pair<TreeNode<int>*, int>> q;
+    q.push({root, 0});
+
+    while(!q.empty()){
+        auto it = q.front();
+        q.pop();
+        TreeNode<int>* node = it.first;
+        int line = it.second;
+        // check if line does not exist in map
+        if(umap.find(line) == umap.end()){
+            umap[line] = node->val;
+        }
+
+        if(node->left) q.push({node->left, line-1});
+        if(node->right) q.push({node->right, line+1});
+    }
+
+    for(auto it: umap){
+        ans.push_back(it.second);
+    }  
+
+    return ans; 
+}
