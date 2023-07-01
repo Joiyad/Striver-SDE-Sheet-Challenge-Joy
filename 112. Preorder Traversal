@@ -1,0 +1,20 @@
+// function for preorder traversal
+void preorder(TreeNode* root, vector<int> &ans){
+    // base case
+    if(root == NULL) return;
+    
+    ans.push_back(root->data);
+    // recursive call for left sub tree
+    preorder(root->left, ans);
+    // recursive call for right sub tree
+    preorder(root->right, ans);
+}
+
+vector<int> getPreOrderTraversal(TreeNode *root)
+{
+    // Approach: recursively iterate through tree
+    // T=O(n) S=O(1)
+    vector<int> ans;
+    preorder(root, ans);
+    return ans;
+}
