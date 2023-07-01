@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+
+// function for inorder traversal
+void inorder(TreeNode* root, vector<int> &ans){
+    // base case
+    if(root == NULL) return;
+    
+    // recursive call for left sub tree
+    inorder(root->left, ans);
+    ans.push_back(root->data);
+    inorder(root->right, ans);
+}
+
+vector<int> getInOrderTraversal(TreeNode *root)
+{
+    // inorder traversal: left -> root -> right
+    // T=O(height) S=O(1)
+    vector<int> ans;
+    inorder(root, ans);
+    return ans;
+}
