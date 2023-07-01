@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+bool isPalindrome(int low, int high, string str){
+	while(low < high){
+		if(str[low] != str[high]) return false;
+		low++;
+		high--;
+	}
+	return true;
+}
+
+int minCharsforPalindrome(string str) {
+	// Two Pointer approach: we will iterate from start and end and compare 
+	// T=O(n^2) S=O(1)
+	int low=0, high=str.size()-1;
+	int x=high, ans=0;
+
+	while(low<high){
+		if(str[low] == str[high]){
+			low++;
+			high--;
+		}
+		else{
+			ans++;
+			low=0;
+			high=--x;
+		}
+	}
+	return ans;
+
+	// Another approach: since we can insert only at front, we have to make palindrome using
+	// first character
+	// T=O(n^2) S=O(1)
+	int n = str.size();
+	int high = n-1;
+
+	while(high>0){
+		if(str[high] == str[0]){
+			if(isPalindrome(0, high, str)) return n-1-high;
+		}
+		high--;
+	}
+
+	// if you not find any palindrome
+	return n-1;
+
+	// KMP algorith: in kmp we find the largest prefix which is also suffix
+	// T=O(2*n) S=O(n)
+	string copy = str;
+	reverse(copy.begin(), copy.end());
+	int n = str.size();
+	str += copy;
+
+	int lps[2*n];
+	lps[0] = 0;
+	int i=1;
+	int j=0;
+	while(i<2*n){
+		if(str[i] == str[j]){
+			lps[i] = j+1;
+			i++;
+			j++;
+		}
+		else{
+			if(j-1>0){
+				j = lps[j-1];
+			}
+			else{
+				lps[i] = 0;
+				i++;
+			}
+		}
+	}
+
+	return n-lps[2*n-1];
+}
