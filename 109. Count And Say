@@ -1,0 +1,49 @@
+#include <bits/stdc++.h> 
+string countAndSay(int n, string ans="1") {
+        // base case
+        if(n == 1){
+            return ans;
+        }
+
+        // logic
+        int i=0, j=0;
+        int len = ans.size();
+        string curr = "";
+        while(i < len){
+            j = i;
+            while(i < len && ans[i] == ans[j]) i++;
+            curr += to_string(i-j) + ans[j];
+        }
+        
+        // recursive call
+        return countAndSay(n-1, curr);
+    }
+
+string writeAsYouSpeak(int n) 
+{
+	// Approach: recursive solution
+	// T=O(2^n) S=O(n) recursive stack space
+	string ans = "1";
+	return countAndSay(n, ans);
+
+	// Optimization: using dp
+	// T=O(m*n) S=O(n*m)
+	vector<string> dp(n+1);
+	dp[1] = "1";
+
+	for(int i=2; i<=n; i++){
+		string prev = dp[i-1];
+		string curr = "";
+
+		for(int j=0; j<prev.size(); j++){
+			int count = 1;
+			while(j+1<prev.size() && prev[j] == prev[j+1]){
+				count++;
+				j++;
+			}
+			curr += to_string(count) + prev[j];
+		}
+		dp[i] = curr;
+	}
+	return dp[n];
+}
