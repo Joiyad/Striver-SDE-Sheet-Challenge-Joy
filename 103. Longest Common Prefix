@@ -1,0 +1,27 @@
+string longestCommonPrefix(vector<string> &arr, int n)
+{
+    // brute force: iterate over all strings
+    // T=O(n*k) S=O(1)
+    string ans = "";
+    for(int i=1; i<arr.size(); i++){
+        string s1 = arr[i];
+        string s2 = arr[i-1];
+        int j=0;
+
+        string temp="";
+        while(j<min(s1.size(), s2.size()) && s1[j] == s2[j]){
+            temp += s1[j];
+            j++;
+        }
+        // if there is no matching character
+        if(temp.size() == 0) return "";
+        // if there is at least 1 matching character
+        if(ans.length() == 0 || s1.length() < ans.length()){
+            ans = temp;
+        }
+    }
+
+    return ans;
+}
+
+
