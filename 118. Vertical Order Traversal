@@ -1,0 +1,44 @@
+#include <bits/stdc++.h> 
+
+vector<int> verticalOrderTraversal(TreeNode<int> *root)
+{
+    // Approach: using vertical lines similar to bottom view approach
+    if(root == NULL) return {};
+    vector<int> ans;
+
+    // queue will store node and line no.
+    queue<pair<TreeNode<int>*, int>> q;
+
+    // map will store line no. and data corresponding to that line
+    map<int, vector<int>> mp;
+    q.push({root, 0});
+    mp[0].push_back(root->data);
+
+    while(!q.empty()){
+        auto it = q.front();
+        q.pop();
+
+        TreeNode<int> *node = it.first;
+        int line = it.second;
+
+        // check for left subtree
+        if(node->left){
+            q.push({node->left, line-1});
+            mp[line-1].push_back(node->left->data);
+        }
+
+        // check for right subtree
+        if(node->right){
+            q.push({node->right, line+1});
+            mp[line+1].push_back(node->right->data);
+        }
+    }
+
+    for(auto it: mp){
+        for(auto num: it.second){
+            ans.push_back(num);
+        }
+    }
+
+    return ans;
+}
