@@ -1,0 +1,64 @@
+#include <bits/stdc++.h> 
+
+// make a class that will store the left iteration index and right iteration index as its parameters
+class Temp {
+public:
+    int height;
+    int leftIndex;
+    int rightIndex;
+
+    Temp(int h, int li, int ri) {
+        height = h;
+        leftIndex = li;
+        rightIndex = ri;
+    }
+};
+
+int heightOfTheTree(vector<int>& inorder, vector<int>& levelOrder, int N){
+    // Approach: we will make partitions each time left and right around root
+    // from levelorder we will find corresponding index in inorder the left portion to it
+    // will be left sub tree and right will be right sub tree and each level will increment
+
+	int maxHeight = 0;
+    // define queue of custom class
+    queue<Temp> q;
+
+    if(N >= 1) {
+        // make object with initial leftIndex = 0 and rightIndex = n-1
+        Temp temp(0, 0, N - 1);
+        q.push(temp);
+    }
+
+    // map will store value and corresponding index in inorder
+    unordered_map<int, int> map;
+    for(int i = 0;i < N; i++) {
+        map[inorder[i]] = i;
+    }
+
+    for(int i = 0;i < N; i++) {
+        Temp temp = q.front();
+        q.pop();
+
+        maxHeight = max(temp.height, maxHeight);
+
+        int li = temp.leftIndex;
+        int ri = temp.rightIndex;
+        int rootIndex;
+
+        rootIndex = map[levelOrder[i]];
+
+        // for left subtree
+        if(rootIndex - 1 >= li) {
+            Temp leftSubTree(temp.height + 1, li, rootIndex - 1);
+            q.push(leftSubTree);
+        }
+
+        // for right subtree
+        if(rootIndex + 1 <= ri) {
+            Temp rightSubTree(temp.height + 1, rootIndex + 1, ri);
+            q.push(rightSubTree);
+        }
+    }
+
+    return maxHeight;
+}
