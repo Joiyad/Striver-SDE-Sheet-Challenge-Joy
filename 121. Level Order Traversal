@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+vector<int> getLevelOrder(BinaryTreeNode<int> *root)
+{
+    // Approach: level order traversal
+    if(root == NULL) return {};
+    queue<BinaryTreeNode<int>*> q;
+    q.push(root);
+    vector<int> ans;
+
+    while(!q.empty()){
+        int size = q.size();
+
+        for(int i=0; i<size; i++){
+            BinaryTreeNode<int>* node = q.front();
+            q.pop();
+
+            // store value
+            ans.push_back(node->val);
+
+            // call for left subtree
+            if(node->left){
+                q.push(node->left);
+            }
+
+            // call for right subtree
+            if(node->right){
+                q.push(node->right);
+            }
+        }
+    }    
+
+    return ans;
+}
