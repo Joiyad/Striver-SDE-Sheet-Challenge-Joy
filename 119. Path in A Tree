@@ -1,0 +1,26 @@
+void findPath(vector<int> &ans, TreeNode<int> * root, int x){
+	// base case
+	if(root == NULL) return;
+
+	//if you found the node then return 
+	ans.push_back(root->data);
+	if(root->data == x) return;
+
+	// call for left and right subtree
+	if(root->left) findPath(ans, root->left, x);
+	if(root->right) findPath(ans, root->right, x);
+	
+	// if you have not found x in path pop it
+	if(ans.back() != x) ans.pop_back();
+}
+
+vector<int> pathInATree(TreeNode<int> *root, int x)
+{
+	// Approach: we will iterate through the moment we find the node we will return else
+	// we will push the nodes and pop the nodes according to situation
+	if(root == NULL) return {};
+
+    vector<int> ans;
+	findPath(ans, root, x);
+	return ans;
+}
