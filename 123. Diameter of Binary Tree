@@ -1,0 +1,22 @@
+
+int height(TreeNode<int> *root, int &diameter){
+    // base case
+    if(root == NULL) return 0;
+
+    // call for left subtree
+    int lh = height(root->left, diameter);
+    // call for right subtree
+    int rh = height(root->right, diameter);
+
+    diameter = max(diameter, lh+rh);
+
+    return 1 + max(lh, rh);
+}
+
+int diameterOfBinaryTree(TreeNode<int> *root)
+{
+	// Approach: diameter can be seen as left subtree height + right subtree height
+    int diameter = 0;
+    height(root, diameter);
+    return diameter;
+}
