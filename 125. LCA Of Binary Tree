@@ -1,0 +1,55 @@
+#include <bits/stdc++.h> 
+// function for finding path of node
+void findPath(vector<int> &ans, TreeNode<int> * root, int x){
+	// base case
+	if(root == NULL) return;
+
+	//if you found the node then return 
+	ans.push_back(root->data);
+	if(root->data == x) return;
+
+	// call for left and right subtree
+	if(root->left) findPath(ans, root->left, x);
+	if(root->right) findPath(ans, root->right, x);
+	
+	// if you have not found x in path pop it
+	if(ans.back() != x) ans.pop_back();
+}
+
+// function for finding lca
+TreeNode<int>* findNode(TreeNode<int>* root, int x, int y){
+    // base case
+	if(root == NULL || root->data == x || root->data == y) return root;
+
+    // recursive call for left subtree and right subtree
+    TreeNode<int>* left = findNode(root->left, x, y);
+    TreeNode<int>* right = findNode(root->right, x, y);
+
+    if(left == NULL) return right;
+    else if(right == NULL) return left;
+    else return root;
+}
+
+
+int lowestCommonAncestor(TreeNode<int> *root, int x, int y)
+{
+    // Brute force: find path of each x and y and store, then compare both arrays
+    // T=O(n) S=O(n)
+    vector<int> pathX;
+    findPath(pathX, root, x);
+    vector<int> pathY;
+    findPath(pathY, root, y);
+
+    int i=1;
+    if(pathX[0] != pathY[0]) return 0;
+    while(true){
+        if(pathX[i] != pathY[i]) return pathX[i-1];
+        i++;
+    }
+    return 0;
+
+    // Approach: iterate till you find either x or y or null and return root
+    // T=O(N) S=O(1)
+    TreeNode<int>* node = findNode(root, x, y);
+    return node->data;
+}
