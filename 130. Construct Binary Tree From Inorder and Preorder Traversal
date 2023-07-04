@@ -1,0 +1,34 @@
+#include <bits/stdc++.h> 
+
+TreeNode<int>* makeTree(vector<int> inorder, vector<int> preorder, int preStart, int preEnd, int inStart, int inEnd, unordered_map<int, int> &umap){
+    // base case
+    if(preStart > preEnd || inStart > inEnd) return NULL;
+
+    TreeNode<int>* root = new TreeNode<int> (preorder[preStart]);
+    int rootIndex = umap[root->data];
+    int n = rootIndex-inStart;
+
+    // recursive calls
+    // left subtree: all values before root in inorder will form leftsubtree
+    root->left = makeTree(inorder, preorder, preStart+1, preStart+n, inStart, rootIndex-1, umap);
+    // right subtree: all values after root in inorder will form rightsubtree
+    root->right = makeTree(inorder, preorder, preStart+n+1, preEnd, rootIndex+1, inEnd, umap);
+
+    return root;
+}
+
+TreeNode<int> *buildBinaryTree(vector<int> &inorder, vector<int> &preorder)
+{
+	// Approach: we will partition array based on the root location in inorder
+    // the left remaining will form left subtree and right remaining will form right subtree
+    // T=O(n) S=O(n)
+    int preStart = 0, preEnd = preorder.size()-1, inStart = 0, inEnd = inorder.size()-1;
+
+    // this map will store values in inorder with indices
+    unordered_map<int, int> umap;
+    for(int i=0; i<inorder.size(); i++){
+        umap[inorder[i]] = i;
+    }
+
+    return makeTree(inorder, preorder, preStart, preEnd, inStart, inEnd, umap);
+}
