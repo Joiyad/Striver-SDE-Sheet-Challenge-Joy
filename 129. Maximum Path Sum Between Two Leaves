@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+// function for calculating maximum path sum
+long long int PathSum(TreeNode<int>* root, long long int &ans){
+    // base case
+    if(root == NULL) return 0;
+
+    // find maxm sum in left
+    long long int leftsum = PathSum(root->left, ans);
+    // find maxm sum in right
+    long long int rightsum = PathSum(root->right, ans);
+
+    ans = max(ans, leftsum+rightsum+root->val);
+    return (max(leftsum, rightsum) + root->val);
+}
+
+long long int findMaxSumPath(TreeNode<int> *root)
+{
+    // Approach: maxm path sum = leftpath maxm sum + rightpath maxm sum + root node
+    // T=O(n) S=O(1)
+    if(root == NULL || root->left == NULL || root->right == NULL) return -1;
+    long long int ans = -1;
+    PathSum(root, ans);
+    return ans;
+}
