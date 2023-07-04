@@ -1,0 +1,35 @@
+
+#include <bits/stdc++.h>
+
+TreeNode<int>* makeTree(vector<int> inorder, vector<int> postorder, int postStart, int postEnd, int inStart, int inEnd, unordered_map<int, int> &umap){
+    // base case
+    if(postStart > postEnd || inStart > inEnd) return NULL;
+
+    TreeNode<int>* root = new TreeNode<int> (postorder[postEnd]);
+    int rootIndex = umap[root->data];
+    int n = rootIndex-inStart;
+
+    // recursive calls
+    // left subtree: all values before root in inorder will form leftsubtree
+    root->left = makeTree(inorder, postorder, postStart, postStart+n-1, inStart, rootIndex-1, umap);
+    // right subtree: all values after root in inorder will form rightsubtree
+    root->right = makeTree(inorder, postorder, postStart+n, postEnd-1, rootIndex+1, inEnd, umap);
+
+    return root;
+}
+
+
+TreeNode<int>* getTreeFromPostorderAndInorder(vector<int>& postOrder, vector<int>& inOrder) 
+{
+	// Approach: postorder: left->right->root
+    // inorder: left->root->right
+    // map index of root from post in inorder and partition array
+    // T=O(n) S=O(n)
+    if(postOrder.size() != inOrder.size()) return NULL;
+    int postStart=0, postEnd=postOrder.size()-1, inStart=0, inEnd=postOrder.size()-1;
+    unordered_map<int, int> umap;
+    for(int i=0; i<postOrder.size(); i++){
+        umap[inOrder[i]] = i;
+    }
+    return makeTree(inOrder, postOrder, postStart, postEnd, inStart, inEnd, umap);
+}
