@@ -1,0 +1,56 @@
+#include <bits/stdc++.h> 
+// function for checking node is leaf or not
+bool isLeafNode(TreeNode<int>* root){
+    return (root->left == NULL && root->right == NULL);
+}
+
+// function for left traversal
+void leftTraversal(TreeNode<int>* root, vector<int> &ans){
+    TreeNode<int> *temp = root->left;
+
+    while(temp){
+        if(!isLeafNode(temp)) ans.push_back(temp->data);
+        if(temp->left) temp = temp->left;
+        else temp = temp->right;
+    }
+}
+
+// function for leaf node traversal
+void leafTraversal(TreeNode<int>* root, vector<int> &ans){
+    if(root->left) leafTraversal(root->left, ans);
+
+    if(isLeafNode(root)){
+        ans.push_back(root->data);
+        return;
+    }
+
+    if(root->right) leafTraversal(root->right, ans);
+}
+
+// function for right traversal
+void rightTraversal(TreeNode<int>* root, vector<int> &ans){
+    TreeNode<int> *temp = root->right;
+    vector<int> right;
+
+    while(temp){
+        if(!isLeafNode(temp)) right.push_back(temp->data);
+        if(temp->right) temp = temp->right;
+        else temp = temp->left;
+    }
+
+    for(int i=right.size()-1; i>=0; i--) ans.push_back(right[i]);
+}
+
+vector<int> traverseBoundary(TreeNode<int>* root){
+    // Boundary traversal = left + right + leaf nodes
+    if(root == NULL) return {};
+    vector<int> left, right, leaf, ans;
+    ans.push_back(root->data);
+    if(isLeafNode(root)) return ans;
+
+    leftTraversal(root, ans);
+    leafTraversal(root, ans);
+    rightTraversal(root, ans);
+
+    return ans;
+}
