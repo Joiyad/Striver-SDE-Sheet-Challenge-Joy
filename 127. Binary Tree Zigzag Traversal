@@ -1,0 +1,42 @@
+#include <bits/stdc++.h> 
+
+vector<int> zigZagTraversal(BinaryTreeNode<int> *root)
+{
+    // Approach: if level is odd, traversal: right->left and if level is even, traversal: left->right
+    // queue will store node
+    // T=O(n) S=O(n)
+    if(root == NULL) return {};
+    queue<BinaryTreeNode<int>*> q;
+    q.push(root);
+    vector<int> ans;
+    bool isEven = true;
+
+    while(!q.empty()){
+        int size = q.size();
+        vector<int> v(size);
+        
+        for(int i=0; i<size; i++){
+            BinaryTreeNode<int>* node = q.front();
+            q.pop();
+
+            // check order in which we have to store
+            int ind = (isEven) ? i : size-i-1;
+            v[ind] = node->data;
+
+            // call for left 
+            if(node->left){
+                q.push(node->left);
+            }
+
+            // call for right
+            if(node->right){
+                q.push(node->right);
+            }
+        }
+
+        isEven = !isEven;
+        ans.insert(ans.end(), v.begin(), v.end());
+    }
+
+    return ans;
+}
