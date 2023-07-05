@@ -1,0 +1,62 @@
+#include <bits/stdc++.h> 
+// recursive function for flattening BT
+void flat(TreeNode<int>* root, TreeNode<int>* &prev){
+    // base case
+    if(root == NULL) return;
+
+    // recursive calls
+    flat(root->right, prev);
+    flat(root->left, prev);
+    // new connections
+    root->right = prev;
+    root->left = NULL;
+    prev = root;
+}
+
+// iterative function for flattening BT
+void flatIterative(TreeNode<int>* root){
+    stack<TreeNode<int>*> st;
+    st.push(root);
+
+    while(!st.empty()){
+        TreeNode<int>* node = st.top();
+        st.pop();
+
+        if(node->right) st.push(node->right);
+        if(node->left) st.push(node->left);
+
+        if(!st.empty()) node->right = st.top();
+        node->left = NULL;
+    }
+}
+
+TreeNode<int> *flattenBinaryTree(TreeNode<int> *root)
+{
+    // Approach: modifying connections such that for each node left = null and right = prev
+    // T=O(n) S=O(n)
+    TreeNode<int>* prev = NULL;
+    flat(root, prev);
+    return root;
+
+    // Approach 2: using stack and iterative method
+    // T=O(n) S=O(n)
+    if(root == NULL) return NULL;
+    flatIterative(root);
+    return root;
+
+    // Approach 3: using morris traversal
+    // T=O(n) S=O(1)
+    TreeNode<int>* curr = root;
+    while(curr){
+        if(curr->left){
+            TreeNode<int>* prev = curr->left;
+            while(prev->right) prev = prev->right;
+            prev->right = curr->right;
+            curr->right = curr->left;
+            curr->left = NULL;
+        }
+        curr = curr->right;
+    }
+
+    return root;
+}
