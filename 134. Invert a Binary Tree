@@ -1,0 +1,56 @@
+#include <bits/stdc++.h> 
+// function for storing all parents till leaf node
+bool storeParents(TreeNode<int>* root, stack<TreeNode<int>*> &parents, TreeNode<int>* leaf){
+    parents.push(root);
+
+    // if root is leaf node
+    if(root->left == NULL && root->right == NULL){
+        if(root->data == leaf->data) return true;
+        else parents.pop();
+        return false;
+    }
+
+    // call for left subtree
+    if(root->left){
+        if(storeParents(root->left, parents, leaf)) return true;
+    }
+
+    // call for right subtree
+    if(root->right){
+        if(storeParents(root->right, parents, leaf)) return true;
+    }
+
+    parents.pop();
+    return false;
+}
+
+TreeNode<int> * invertBinaryTree(TreeNode<int> *root, TreeNode<int> *leaf)
+{
+	// Approach: we will use stack to store all parents and modify the connections
+  // T=O(n) S=O(n)
+    if(root == NULL) return NULL;
+    stack<TreeNode<int>*> parents;
+    storeParents(root, parents, leaf);
+
+    TreeNode<int>* ans = parents.top();
+    parents.pop();
+    TreeNode<int>* head = ans;
+
+    while(!parents.empty()){
+        TreeNode<int>* n = parents.top();
+        parents.pop();
+
+        if(n->right == head){
+            n->right = n->left;
+            n->left = NULL;
+        }
+        else{
+            n->left = NULL;
+        }
+
+        head->left = n;
+        head = n;
+    }
+
+    return ans;
+}
