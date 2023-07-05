@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+// functionf for making BST
+TreeNode<int>* makeBST(vector<int> &preOrder, int &ind, int limit = INT_MAX){
+    // base case
+    if(preOrder.size() <= ind || preOrder[ind] >= limit) return NULL;
+
+    TreeNode<int>* root = new TreeNode<int>(preOrder[ind]);
+    ind++;
+    // call for left and right
+    root->left = makeBST(preOrder, ind, root->data);
+    root->right = makeBST(preOrder, ind, limit);
+
+    return root;
+}
+
+TreeNode<int>* preOrderTree(vector<int> &preOrder){
+    // Approach: using recursion and bound concept
+    // T=O(n) S=O(n)
+    int ind = 0;
+    return makeBST(preOrder, ind);
+}
