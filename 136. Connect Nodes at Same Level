@@ -1,0 +1,25 @@
+void connectNodes(BinaryTreeNode< int > *root) {
+    // Approach: level order traversal
+    // T=O(n) S=O(n)
+    queue<BinaryTreeNode<int>*> q;
+    q.push(root);
+
+    while(!q.empty()){
+        int size = q.size();
+        BinaryTreeNode<int>* prev = NULL;
+
+        for(int i=0; i<size; i++){
+            BinaryTreeNode<int>* node = q.front();
+            q.pop();
+            // for first iteration prev will become node and then use next pointer
+            if(prev){
+                prev->next = node;
+            }
+            prev = node;
+
+            // check for left and right
+            if(node->left) q.push(node->left);
+            if(node->right) q.push(node->right);
+        }
+    }
+}
