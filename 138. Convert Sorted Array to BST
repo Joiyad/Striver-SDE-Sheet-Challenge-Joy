@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+// function for making BST
+TreeNode<int>* makeBST(vector<int> &arr, int n, int l, int h){
+    // base case
+    if(l > h) return NULL;
+    
+    int mid = (l+h)/2;
+    TreeNode<int>* node = new TreeNode<int>(arr[mid]);
+    
+    // recursive calls since complete binary tree is required
+    node->left = makeBST(arr, n, l, mid-1);
+    node->right = makeBST(arr, n, mid+1, h);
+
+    return node;
+}
+
+
+TreeNode<int>* sortedArrToBST(vector<int> &arr, int n)
+{
+    // Approach: using Recursion
+    // T=O(n) S=O(n)
+    return makeBST(arr, n, 0, n-1);
+}
