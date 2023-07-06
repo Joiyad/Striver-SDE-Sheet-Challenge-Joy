@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+
+TreeNode<int>* LCAinaBST(TreeNode<int>* root, TreeNode<int>* P, TreeNode<int>* Q)
+{
+    // Approach: simple iteration and use of BST property
+    // T=O(n) S=O(n)
+	// base case
+    if(root == NULL) return NULL;
+
+    // there are 3 possible cases
+    // case1: both p and q are greater than root
+    // case2: both are less than root
+    // case3: both are in different side of root
+    if(root->data < P->data && root->data < Q->data) LCAinaBST(root->right, P, Q);
+    else if(root->data > P->data && root->data > Q->data) LCAinaBST(root->left, P, Q);
+    else return root;
+}
