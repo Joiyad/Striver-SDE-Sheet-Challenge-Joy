@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+int find(TreeNode<int>* root, int X, int &ans){
+    // base case
+    if(root == NULL) return -1e9;
+
+    if(root->val > X) find(root->left, X, ans);
+    if(root->val <= X){
+        ans = max(ans, root->val);
+        find(root->right, X, ans);
+    }
+
+    return ans;
+}
+
+int floorInBST(TreeNode<int> * root, int X)
+{
+    // Approach: iterate and if root value is greater then move left
+    // if value is greater or equal and store that and move right
+    int ans = -1e9;
+    return find(root, X, ans);
+}
