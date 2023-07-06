@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+void find(BinaryTreeNode<int>* root, int X, int &ans){
+    // base case
+    if(root == NULL) return;
+
+    if(root->left) find(root->left, X, ans);
+
+    if(root->data >= X){
+        ans = min(ans, root->data);
+    }
+    
+    if(root->right) find(root->right, X, ans);
+}
+
+int findCeil(BinaryTreeNode<int> *root, int X){
+    // Approach: similar to earlier problem iterate and compare with x
+    // T=O(n) S=O(n)
+    int ans = 1e9;
+    find(root, X, ans);
+    // if not found anything
+    if(ans == 1e9) return -1;
+    return ans;
+}
