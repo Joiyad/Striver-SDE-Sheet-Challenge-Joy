@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+void find(BinaryTreeNode<int>* root, int key, pair<int, int> &ans){
+    // base case 
+    if(root == NULL) return;
+
+    // if root is less that ans and lies in right subtree
+    if(root->data > ans.first && root->data < key) ans.first = root->data;
+    // if root is greater than ans and lies in left subtree
+    if(root->data < ans.second && root->data > key) ans.second = root->data;
+    
+    find(root->left, key, ans);
+    find(root->right, key, ans);
+}
+
+pair<int,int> predecessorSuccessor(BinaryTreeNode<int>* root, int key)
+{
+    // Brute force: find key and left will be predecessor and right will be successor
+    // T=O(n) S=O(n)
+    pair<int, int> ans = {INT_MIN, INT_MAX};
+    find(root, key, ans);
+    if(ans.first == INT_MIN) ans.first = -1;
+    if(ans.second == INT_MAX) ans.second = -1;
+    return ans;
+}
