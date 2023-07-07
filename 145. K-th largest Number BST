@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+void find(TreeNode<int>* root, int &k, int &ans){
+    // base case
+    if(root == NULL) return;
+
+    find(root->right, k, ans);
+    // reduce k at each iteration
+    k--;
+    // when k is zero root points to ans
+    if(k == 0){
+        ans = root->data;
+        return;
+    }
+    find(root->left, k, ans);
+}
+
+int KthLargestNumber(TreeNode<int>* root, int k) 
+{
+    // Approach: traversal output of BST is in sorted array, since kth largest
+    // iteration: right->root->left
+    // T=O(n) S=O(n)
+    int ans = -1;
+    find(root, k, ans);
+    return ans;
+}
