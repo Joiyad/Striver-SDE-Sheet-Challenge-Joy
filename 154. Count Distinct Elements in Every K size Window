@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+vector<int> countDistinctElements(vector<int> &arr, int k) 
+{
+    // Brute force
+    // T=O(n*k) S=O(n*k)
+    vector<int> ans;
+    for(int i=0; i<=arr.size()-k; i++){
+        unordered_map<int, int> umap;
+        for(int j=i; j<i+k; j++){
+            umap[arr[j]]++;
+        }
+        ans.push_back(umap.size());
+    }
+	return ans;
+
+    // optimization: can be optimized 
+    // T=O(n) S=O(k)
+    vector<int> ans;
+    unordered_map<int, int> umap;
+    for(int i=0; i<arr.size(); i++){
+        umap[arr[i]]++;
+        if(i>=k-1){
+            ans.push_back(umap.size());
+            umap[arr[i-k+1]]--;
+            // if freq reaches 0 remove that element
+            if(umap[arr[i-k+1]] == 0) umap.erase(arr[i-k+1]);
+        }
+    }
+    return ans;
+}
