@@ -1,0 +1,84 @@
+#include <bits/stdc++.h> 
+class BSTIterator {
+    stack<BinaryTreeNode<int>*> st;
+
+    public:
+    BSTIterator(BinaryTreeNode<int>* root, bool flag){
+        while(root){
+            st.push(root);
+            // flag is here to differentiate between next and before
+            // flag = true -->next
+            // flag = false --> before
+            if(flag) root = root->left;
+            else root = root->right;
+        }
+    }
+
+    int next(bool flag){
+        BinaryTreeNode<int>* temp = st.top();
+        st.pop();
+        BinaryTreeNode<int>* curr;
+
+        if(flag){
+            curr = temp->right;
+        }
+        else curr = temp->left;
+
+        while(curr){
+            st.push(curr);
+            if(flag) curr = curr->left;
+            else curr = curr->right;
+        }
+
+        return temp->data;
+    }
+
+    bool isNextPresent(){
+        return !st.empty();
+    }
+};
+
+void inorderTraversal(BinaryTreeNode<int>* root, vector<int> &inorder){
+    // base case]
+    if(root == NULL) return;
+
+    // left->root->right
+    inorderTraversal(root->left, inorder);
+    inorder.push_back(root->data);
+    inorderTraversal(root->right, inorder);
+}
+
+bool pairSumBst(BinaryTreeNode<int> *root, int k)
+{
+    // Brute force: find inorder traversal that is in sorted order and use two pointer approach
+    // T=O(n) S=O(n)
+    vector<int> inorder;
+    inorderTraversal(root, inorder);
+    
+    int low = 0; int high = inorder.size()-1;
+    while(low < high){
+        int sum = inorder[low] + inorder[high];
+        if(sum == k) return true;
+        else if(sum > k) high--;
+        else low++;
+    }
+
+    return false;
+
+    // Optimization: Using BST iterator
+    // T=O(n) S=O(n) recursive space only
+    BSTIterator* l = new BSTIterator(root, true);
+    BSTIterator* r = new BSTIterator(root, false);
+
+    int low = l->next(true);
+    int high = r->next(false);
+
+    while(low < high){
+        int sum = low + high;
+        if(sum == k) return true;
+        else if(sum > k) high = r->next(false);
+        else low = l->next(true);
+    }
+
+    return false;
+}
