@@ -1,0 +1,20 @@
+#include <bits/stdc++.h> 
+int kthLargest(vector<int>& arr, int size, int K)
+{
+	// Brute force: sort the elements and return k-1 th element
+	// T=O(nlogn) S=O(1)
+	sort(arr.begin(), arr.end(), [](int a, int b){
+		return a>b;
+	});
+	return arr[K-1];
+
+	// Approach: using min heap
+	// T=O(n*logk) S=O(n)
+	priority_queue<int, vector<int>, greater<int>> pq;
+	for(auto &it: arr) {
+		pq.push(it);
+		if(pq.size() > K) pq.pop();
+	}
+	
+	return pq.top();
+}
