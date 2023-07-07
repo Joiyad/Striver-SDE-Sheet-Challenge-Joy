@@ -1,0 +1,59 @@
+#include<sstream>
+
+// can be used multiple iterations, we will use level order traversal
+string serializeTree(TreeNode<int> *root)
+{
+    if(root == NULL) return "";
+    string code = "";
+    queue<TreeNode<int>*> q;
+    q.push(root);
+
+    while(!q.empty()){
+        TreeNode<int>* node = q.front();
+        q.pop();
+
+        // for null $ and separate each node by ,
+        if(node == NULL) code.append("$,");
+        else code.append(to_string(node->data)+',');
+        if(node){
+            q.push(node->left);
+            q.push(node->right);
+        }
+    }
+    return code;
+}
+
+TreeNode<int>* deserializeTree(string &serialized)
+{
+    if(serialized.length() == 0) return NULL;
+    stringstream code(serialized);
+    string s;
+    getline(code, s, ',');
+
+    // make node
+    TreeNode<int>* root = new TreeNode<int>(stoi(s));
+    queue<TreeNode<int>*> q;
+    q.push(root);
+
+    while(!q.empty()){
+        TreeNode<int>* node = q.front();
+        q.pop();
+
+        getline(code, s, ',');
+        if(s == "$") node->left = NULL;
+        else{
+            TreeNode<int>* n = new TreeNode<int> (stoi(s));
+            node->left = n;
+            q.push(n);
+        }
+
+        getline(code, s, ',');
+        if(s == "$") node->right = NULL;
+        else{
+            TreeNode<int>* n = new TreeNode<int> (stoi(s));
+            node->right = n;
+            q.push(n);
+        }
+    }
+    return root;
+}
