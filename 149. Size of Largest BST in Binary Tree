@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+class Node{
+    public:
+    int minm, maxm, size;
+
+    Node(int mn, int mx, int sz){
+        minm = mn;
+        maxm = mx;
+        size = sz;
+    }
+};
+
+Node findLargestBST(TreeNode<int>* root){
+    if(root == NULL) return Node(INT_MAX, INT_MIN, 0);
+
+    auto leftNode = findLargestBST(root->left);
+    auto rightNode = findLargestBST(root->right);
+
+    // if node is in bounds that means it forms BST
+    if(root->data > leftNode.maxm && root->data < rightNode.minm){
+        return Node(min(leftNode.minm, root->data), max(rightNode.maxm, root->data), 1+leftNode.size+rightNode.size);
+    }
+
+    // if not BST
+    return Node(INT_MIN, INT_MAX, max(leftNode.size, rightNode.size));
+}
+
+int largestBST(TreeNode<int>* root) 
+{
+    return findLargestBST(root).size;
+}
