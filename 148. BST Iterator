@@ -1,0 +1,45 @@
+#include <bits/stdc++.h> 
+//store in format of inorder left->root->right
+class BSTiterator
+{
+    private:
+    stack<TreeNode<int>*> st;
+
+    public:
+    BSTiterator(TreeNode<int> *root)
+    {
+        // store all left to the root
+        while(root){
+            st.push(root);
+            root = root->left;
+        }
+    }
+
+    int next()
+    {
+        TreeNode<int>* temp = st.top();
+        st.pop();
+        // move to right if its right exists
+        TreeNode<int>* curr = temp->right;
+        while(curr){
+            st.push(curr);
+            curr = curr->left;
+        }
+        return temp->data;
+    }
+
+    bool hasNext()
+    {
+        return !st.empty();
+    }
+};
+
+
+/*
+    Your BSTIterator object will be instantiated and called as such:
+    BSTIterator iterator(root);
+    while(iterator.hasNext())
+    {
+       print(iterator.next());
+    }
+*/
