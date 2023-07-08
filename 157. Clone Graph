@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+// T=O(n*k) S=O(n)
+graphNode *cloneGraph(graphNode *node)
+{
+    // Step 1: store all nodes in map
+	unordered_map<graphNode*, graphNode*> umap;
+	queue<graphNode*> q;
+	q.push(node);
+
+	while(!q.empty()){
+		graphNode* n = q.front();
+		q.pop();
+
+		for(auto it: n->neighbours){
+			if(umap.find(it) == umap.end()){
+				graphNode* temp = new graphNode(it->data);
+				umap[it] = temp;
+				q.push(it);
+			}
+		}
+	}
+
+	// iterate over map
+	for(auto it: umap){
+		// iterate over node's neighbours and store their copies
+		for(auto x: it.first->neighbours){
+			it.second->neighbours.push_back(umap[x]);
+		}
+	}
+
+	return umap[node];
+}
