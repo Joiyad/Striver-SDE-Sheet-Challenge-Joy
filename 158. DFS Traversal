@@ -1,0 +1,39 @@
+// fucntion for finding dfs
+void dfs(int node, vector<int> adj[], vector<int> &visited, vector<int> &v){
+    visited[node] = 1;
+    v.push_back(node);
+
+    for(auto it: adj[node]){
+        if(!visited[it]){
+            dfs(it, adj, visited, v);
+        }
+    }
+}
+
+vector<vector<int>> depthFirstSearch(int V, int E, vector<vector<int>> &edges)
+{
+    // dfs traversal of graph
+    // T=O(V+E) S=O(V)
+    int n = edges.size();
+    int m = edges[0].size();
+    vector<int> adj[V];
+    vector<int> visited(V, 0);
+    vector<vector<int>> ans;
+
+    // make adjacency list
+    for(auto it: edges){
+        adj[it[0]].push_back(it[1]);
+        adj[it[1]].push_back(it[0]);
+    }
+
+    // iterate over all verices
+    for(int i=0; i<V; i++){
+        if(!visited[i]){
+            vector<int> v;
+            // call dfs for each component of graph
+            dfs(i, adj, visited, v);
+            ans.push_back(v);
+        }
+    }
+    return ans;
+}
