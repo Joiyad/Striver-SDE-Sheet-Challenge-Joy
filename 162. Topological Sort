@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+void dfs(vector<int> adj[], int visited[], stack<int> &s, int node) {
+  visited[node] = 1;
+
+  for (auto i : adj[node]) {
+    if (!visited[i]) {
+      dfs(adj, visited, s, i);
+    }
+  }
+  s.push(node);
+}
+
+vector<int> topologicalSort(vector<vector<int>> &edges, int V, int e) {
+  int indegree[V] = {0};
+
+  // make adjacency list
+  vector<int> adj[V];
+  for (auto it : edges) {
+    adj[it[0]].push_back(it[1]);
+  }
+
+  // using dfs
+  vector<int> ans;
+  stack<int> s;
+  int visited[V] = {0};
+
+  for (int i = 0; i < V; i++) {
+    if (!visited[i]) {
+      dfs(adj, visited, s, i);
+    }
+  }
+
+  while (!s.empty()) {
+    ans.push_back(s.top());
+    s.pop();
+  }
+
+  return ans;
+
+  // using Kahn's algorith
+  // for finding indegrees
+  for (int i = 0; i < V; i++) {
+    for (auto neighbour : adj[i]) {
+      indegree[neighbour]++;
+    }
+  }
+
+  queue<int> q;
+
+  // iterate over the graph and store starting nodes
+  for (int i = 0; i < V; i++) {
+    if (indegree[i] == 0)
+      q.push(i);
+  }
+
+  vector<int> ans;
+  // find ans
+  while (!q.empty()) {
+    int frontnode = q.front();
+    q.pop();
+    ans.push_back(frontnode);
+
+    for (auto i : adj[frontnode]) {
+      indegree[i]--;
+      if (indegree[i] == 0)
+        q.push(i);
+    }
+  }
+
+  return ans;
+}
