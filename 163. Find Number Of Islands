@@ -1,0 +1,36 @@
+// function for dfs
+void dfs(int** arr, vector<vector<int>> &visited, int row, int col, int n, int m){
+   visited[row][col] = 1;
+
+   int delRow[] = {-1, -1, -1, 0, 0, +1, +1, +1};
+   int delCol[] = {-1, 0, +1, -1, +1, -1, 0, +1};
+
+   for(int i=0; i<=7; i++){
+      int nrow = row + delRow[i];
+      int ncol = col + delCol[i];
+
+      if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && !visited[nrow][ncol] && arr[nrow][ncol] == 1){
+         dfs(arr, visited, nrow, ncol, n, m);
+      }
+   }
+}
+
+int getTotalIslands(int** arr, int n, int m)
+{
+   // Approach: using dfs
+   // T=O(v^2) S=(v) where v is the no. of vertices
+   vector<vector<int>> visited(n, vector<int> (m, 0));
+   int ans = 0;
+
+   for(int i=0; i<n; i++){
+      for(int j=0; j<m; j++){
+         if(!visited[i][j] && arr[i][j] == 1){
+            // iterate over all connected nodes whose values is 1 in one iteration
+            dfs(arr, visited, i, j, n, m);
+            ans++;
+         }
+      }
+   }
+
+   return ans;
+}
