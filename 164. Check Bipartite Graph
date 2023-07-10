@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+
+// function for dfs
+bool dfs(int node, vector<int> adj[], vector<int> &color) {
+  for (auto it : adj[node]) {
+    if (color[it] == -1) {
+      color[it] = 1 - color[node];
+      if(!dfs(it, adj, color)) return false;
+    } else if (color[it] == color[node])
+      return false;
+  }
+  return true;
+}
+
+bool isGraphBirpatite(vector<vector<int>> &edges) {
+  // Approach: Bipartite graph can be said a graph if we cannot fill the graph
+  // using two colors such that no two adjacent nodes have same color
+
+  // step 1: make adjacency list
+  int n = edges.size();
+  vector<int> adj[n];
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (edges[i][j]) {
+        adj[i].push_back(j);
+        adj[j].push_back(i);
+      }
+    }
+  }
+
+  // step 2: fill all nodes with color -1
+  vector<int> color(n, -1);
+  queue<int> q;
+  q.push(0);
+  color[0] = 0;
+
+  // dfs
+  for (int i = 0; i < n; i++) {
+    if (color[i] == -1) {
+      color[i] = 0;
+      if (!dfs(i, adj, color)) return false;
+    }
+  }
+
+  // bfs
+  while (!q.empty()) {
+    int node = q.front();
+    q.pop();
+
+    for (auto it : adj[node]) {
+      if (color[it] == -1) {
+        color[it] = 1 - color[node];
+        q.push(it);
+      } else if (color[it] == color[node])
+        return false;
+    }
+  }
+
+  return true;
+}
