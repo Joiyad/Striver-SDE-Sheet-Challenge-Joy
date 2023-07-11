@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+
+// function for dfs
+void dfs(vector<int> adj[], vector<int> &visited, stack<int> &st, int node){
+    visited[node] = 1;
+
+    for(auto it: adj[node]){
+        if(!visited[it]){
+            dfs(adj, visited, st, it);
+        }
+    }
+    st.push(node);
+}
+
+// function for dfs in transposed matrix
+void dfsTranspose(vector<int> transposedAdj[], vector<int> &visited, vector<int> &v, int node){
+  visited[node] = 1;
+  v.push_back(node);
+  for(auto it: transposedAdj[node]){
+    if(!visited[it]) dfsTranspose(transposedAdj, visited, v, it);
+  }
+}
+
+vector<vector<int>> stronglyConnectedComponents(int n, vector<vector<int>> &edges) {
+  // Approach: Kosaraju algorithm
+  // T=O(V+E) S=O(V)+O(V+E)
+
+  // step 1: make adjacency list
+  vector<int> adj[n];
+  for(auto it: edges){
+    adj[it[0]].push_back(it[1]);
+  }
+
+  // step 2: apply dfs
+  stack<int> st;
+  vector<int> visited(n, 0);
+  for (int i = 0; i < n; i++) {
+    if (!visited[i]) {
+      dfs(adj, visited, st, i);
+    }
+  }
+
+  // step 3: reinitialize visited array
+  for(int i=0; i<n; i++) visited[i] = 0;
+
+  // step 4: make adjacency list for transpose of graph
+  vector<int> transposedAdj[n];
+  for(auto it: edges){
+    transposedAdj[it[1]].push_back(it[0]);
+  }
+
+  // step 5: store the answer while iterating using dfs int transposed graph
+  vector<vector<int>> ans;
+  while(!st.empty()){
+    int node = st.top();
+    st.pop();
+    vector<int> v;
+    if(!visited[node]) dfsTranspose(transposedAdj, visited, v, node);
+    ans.push_back(v);
+  }
+
+  return ans;
+}
