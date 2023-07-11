@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+vector<pair<pair<int, int>, int>> calculatePrimsMST(int n, int m, vector<pair<pair<int, int>, int>> &g)
+{
+    // Approach: prim's algorithm
+    // T=O(ElogV) S=O(V+E)
+    // step 1: make adjacency list;
+    vector<pair<int, int>> adj[n+1];
+    for(int i=0; i<m; i++){
+        adj[g[i].first.first].push_back({g[i].second, g[i].first.second});
+        adj[g[i].first.second].push_back({g[i].second, g[i].first.first});
+    }
+
+    priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+    vector<int> visited(n+1, 0);
+    pq.push({0, {1, -1}});
+    vector<pair<pair<int, int>, int>> ans;
+
+    // step 2: iterate till pq becomes empty
+    while(!pq.empty()){
+        int dist = pq.top().first;
+        int node = pq.top().second.first;
+        int parent = pq.top().second.second;
+        pq.pop();
+
+        // if visited continue
+        if(visited[node]) continue;
+        visited[node] = 1;
+        if(parent!=-1) ans.push_back({{parent, node}, dist});
+
+        for(auto it: adj[node]){
+            if(visited[it.second] == 0) pq.push({it.first, {it.second, node}});
+        }
+    }
+
+    return ans;
+}
