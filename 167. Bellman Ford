@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+int bellmonFord(int n, int m, int src, int dest, vector<vector<int>> &edges) {
+    // Approach: Bellman Ford algorithm: iterater N-1th time and update distances
+    // If in Nth iteration the dist is still updating that means negative cycle is present
+    // T=O(V^2) S=O(V*E)
+
+    vector<int> dist(n+1, 1e9);
+    dist[src] = 0;
+
+    // iterate for n-1 time
+    for(int i=0; i<n; i++){
+        for(auto it: edges){
+            int u = it[0];
+            int v = it[1];
+            int wt = it[2];
+
+            if(dist[u] != 1e9 && dist[u] + wt < dist[v]){
+                dist[v] = dist[u] + wt;
+            }
+        }
+    }
+
+    return dist[dest];
+}
