@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+vector<int> dijkstra(vector<vector<int>> &vec, int V, int edges, int S) {
+  // Dijkstra's algorithm 
+  // T=O(V+ElogV) S=O(V+E)
+  // make adjacency list
+  vector<pair<int, int>> adj[V];
+  for(auto it: vec){
+      adj[it[0]].push_back({it[1], it[2]});
+      adj[it[1]].push_back({it[0], it[2]});
+  }
+  
+  // we will use priority queue (min-heap)
+  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+  vector<int> dist(V);
+
+  // initialize all the distance to infinity
+  for (int i = 0; i < V; i++) dist[i] = INT_MAX;
+  dist[S] = 0;
+  pq.push({0, S});
+
+  while (!pq.empty()) {
+    int node = pq.top().second;
+    int d = pq.top().first;
+    pq.pop();
+
+    for (auto i : adj[node]) {
+      int v = i.first;
+      int edgeWeight = i.second;
+      if (d + edgeWeight < dist[v]) {
+        dist[v] = edgeWeight + d;
+        pq.push({dist[v], v});
+      }
+    }
+  }
+
+  // using set, set allows us to erase unnecessary iterations
+  set<pair<int, int>> st;
+  vector<int> dist(V, INT_MAX);
+  dist[S] = 0;
+  st.insert({0, S});
+
+  while (!st.empty()) {
+    auto it = *(st.begin());
+    int node = it.second;
+    int d = it.first;
+    st.erase(it);
+
+    for (auto i : adj[node]) {
+      int v = i.first;
+      int edgewt = i.second;
+
+      if (d + edgewt < dist[v]) {
+        if (dist[v] != 1e9) {
+          st.erase({dist[v], v});
+        }
+        dist[v] = edgewt + d;
+        st.insert({dist[v], v});
+      }
+    }
+  }
+
+  return dist;
+}
