@@ -1,0 +1,61 @@
+#include <bits/stdc++.h> 
+class Disjointset{
+    vector<int> rank, parent;
+
+    public:
+    Disjointset(int n){
+        rank.resize(n+1, 0);
+        parent.resize(n+1, 0);
+        for(int i=0; i<=n; i++){
+            parent[i] = i;
+        }
+    }
+
+    // function for path compression
+    int findParent(int node){
+        if(node == parent[node]) return node;
+        return parent[node] = findParent(parent[node]);
+    }
+
+    // function for union by rank
+    void unionByRank(int u, int v){
+        int ult_u = findParent(u);
+        int ult_v = findParent(v);
+
+        if(ult_u == ult_v) return;
+        if(rank[ult_u] < rank[ult_v]){
+            parent[ult_u] = ult_v;
+        }
+        else if(rank[ult_u] > rank[ult_v]){
+            parent[ult_v] = ult_u;
+        }
+        else{
+            parent[ult_v] = ult_u;
+            rank[ult_u]++;
+        }
+    }
+};
+
+
+int kruskalMST(int n, int m, vector<vector<int>> &graph) {
+	// Approach: Kruskal's algorithm
+	// T=O(ElogV) S=O(V+E)
+	sort(graph.begin(), graph.end(), [](vector<int> &a, vector<int> &b){
+		return a[2]<b[2];
+	});
+
+	Disjointset dj(n);
+	int ans = 0;
+	for(auto it: graph){
+		int u = it[0];
+		int v = it[1];
+		int wt = it[2];
+
+		if(dj.findParent(u) != dj.findParent(v)){
+			ans += wt;
+			dj.unionByRank(u, v);
+		}
+	}
+
+	return ans;
+}
