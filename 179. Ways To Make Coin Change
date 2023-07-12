@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+
+long solve(int ind, int value, int* denominations, vector<vector<long>> &dp){
+    // base case
+    if(ind == 0 || value == 0){
+        if(value%denominations[0] == 0) return 1;
+        return 0;
+    }
+    if(dp[ind][value] != -1) return dp[ind][value];
+
+    // try all stuff
+    // not pick
+    long notPick = solve(ind-1, value, denominations, dp);
+    // pick
+    long pick = 0;
+    if(value>=denominations[ind]) pick = solve(ind, value-denominations[ind], denominations, dp);
+
+    // return 
+    return dp[ind][value] = pick + notPick;
+}
+
+long countWaysToMakeChange(int *denominations, int n, int value)
+{
+    // since we have to find all possible combinations, recursion can be used
+    // overlapping subproblems --> dp
+    // memoisation
+    // T=O(n*value) S=O(n*value)
+    vector<vector<long>> dp(n, vector<long>(value+1, -1));
+    long val = solve(n-1, value, denominations, dp);
+    if(val == 1e9) return 0;
+    else return val;
+
+    // tabulation
+    // T=O(n*value) S=O(n*value)
+    vector<vector<long>> dp(n, vector<long>(value+1, 0));
+    for(int i=0; i<=value; i++) dp[0][i] = (value%denominations[0] == 0);
+
+    for(int i=1; i<n; i++){
+        for(int j=0; j<=value; j++){
+            long notPick = dp[i-1][j];
+            long pick = 0;
+            if(j>=denominations[i]) pick = dp[i][j-denominations[i]];
+
+            dp[i][j] = pick + notPick;
+        }
+    }
+    return dp[n-1][value];
+
+    // space optimization
+    // T=O(n*value) S=O(value)
+    vector<int> prev(value+1, 0), curr(value+1, 0);
+    for(int i=0; i<=value; i++) prev[i] = (value%denominations[0] == 0);
+
+    for(int i=1; i<n; i++){
+        for(int j=0; j<=value; j++){
+            long notPick = prev[j];
+            long pick = 0;
+            if(j>=denominations[i]) pick = curr[j-denominations[i]];
+
+            curr[j] = pick + notPick;
+        }
+        prev = curr;
+    }
+    return prev[value];
+}
