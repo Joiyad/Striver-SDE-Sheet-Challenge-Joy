@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+
+int solve(int i, int j, vector<int> &arr, vector<vector<int>> &dp){
+    // base case
+    if(i==j) return 0;
+    if(dp[i][j] != -1) return dp[i][j];
+
+    // try all stuff by partitioning
+    int mini = INT_MAX;
+    for(int k=i; k<j; k++){
+        int steps = arr[i-1]*arr[j]*arr[k] + solve(i, k, arr, dp) + solve(k+1, j, arr, dp);
+        mini = min(mini, steps);
+    }
+
+    // return 
+    return dp[i][j] = mini;
+}
+
+int matrixMultiplication(vector<int> &arr, int N)
+{
+    // dp partitioning concept will apply here at each recursive call we will partition array 
+    // into two halfs
+    // T=O(N*N*N) S=O(N*N)+recursive stack space
+    vector<vector<int>> dp(N, vector<int> (N, -1));
+    return solve(1, N-1, arr, dp);
+}
