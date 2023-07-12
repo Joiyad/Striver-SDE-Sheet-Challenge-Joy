@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+
+int solve(int i, int j, vector<vector<int>> &grid, vector<vector<int>> &dp) {
+  // base case
+  if (i == 0 && j == 0)
+    return grid[0][0];
+  if (i < 0 || j < 0)
+    return 1e9;
+  if (dp[i][j] != -1)
+    return dp[i][j];
+
+  // try all stuff
+  int up = grid[i][j] + solve(i - 1, j, grid, dp);
+  int left = grid[i][j] + solve(i, j - 1, grid, dp);
+
+  // return min
+  return dp[i][j] = min(up, left);
+}
+
+int minSumPath(vector<vector<int>> &grid) {
+  // Since we have to try out all possible paths, recursion can be used
+  int n = grid.size();
+  int m = grid[0].size();
+  // return solve(n-1, m-1, grid);
+
+  // Memoisation
+  // T=O(m*n) S=O(m*n)
+  vector<vector<int>> dp(n, vector<int> (m, -1));
+  return solve(n-1, m-1, grid, dp);
+
+//   Tabulation
+//   T=O(m*n) S=O(m*n)
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (i == 0 && j == 0)
+          dp[i][j] = grid[i][j];
+        else {
+          int up = 1e9;
+          int left = 1e9;
+          if (i - 1 >= 0)
+            up = grid[i][j] + dp[i - 1][j];
+          if (j - 1 >= 0)
+            left = grid[i][j] + dp[i][j - 1];
+
+          dp[i][j] = min(up, left);
+        }
+      }
+    }
+
+    return dp[n - 1][m - 1];
+
+  // space optimization
+  // T=O(n*m) S=O(m)
+  vector<int> prev(m + 1, 0), curr(m + 1, 0);
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (i == 0 && j == 0)
+        curr[j] = grid[i][j];
+      else {
+        int up = 1e9;
+        int left = 1e9;
+        if (i - 1 >= 0)
+          up = grid[i][j] + prev[j];
+        if (j - 1 >= 0)
+          left = grid[i][j] + curr[j - 1];
+
+        curr[j] = min(up, left);
+      }
+    }
+    prev = curr;
+  }
+
+  return prev[m-1];
+}
