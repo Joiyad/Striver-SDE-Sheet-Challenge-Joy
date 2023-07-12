@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+int dp[104][10004];
+int solve(int k, int n){
+    // base case
+    if(n == 1 || n == 0) return n;
+    if(k == 1) return n;
+    if(dp[k][n] != -1) return dp[k][n];
+
+    // try all stuff
+    int low = 1, high = n, ans = 1e9;
+    while(low <= high){
+        int mid = (low+high)/2;
+        int down = solve(k-1, mid-1); // since one axe breaks down
+        int up = solve(k, n-mid); // no axe breaks
+        ans = min(ans, 1+max(up, down));
+
+        if(up<down) high = mid-1;
+        else low = mid+1;
+    }
+
+    return dp[k][n] = ans;
+}
+
+int cutLogs(int k, int n)
+{
+    // Approach: using dp + binary search
+    // we will iterate recursivelly and apply binary search for each iteration
+    // vector<vector<int>> dp(k, vector<int> (n, -1));
+    // T=O(n*k*logn) S=O(104*10004)
+    memset(dp , -1 , sizeof(dp));
+    return solve(k, n);
+}
