@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+int solve(int ind, int prev, vector<int> &rack, vector<vector<int>> &dp) {
+  // base case
+  if (ind == rack.size())
+    return 0;
+  if (dp[ind][prev + 1] != -1)
+    return dp[ind][prev + 1];
+
+  // try all stuff
+  int pick = 0;
+  if (prev == -1 || rack[ind] > rack[prev])
+    pick = rack[ind] + solve(ind + 1, ind, rack, dp);
+  int notPick = solve(ind + 1, prev, rack, dp);
+
+  // return
+  return dp[ind][prev + 1] = max(pick, notPick);
+}
+
+int maxIncreasingDumbbellsSum(vector<int> &rack, int n) {
+  // we have to try out all possible ways and find best recursion can be used
+  // due to overlapping subproblems dp can also be applied
+  // T=O(n*n) S=O(n*n) + recursive stack space
+  vector<vector<int>>dp(n, vector<int> (n+1, -1));
+  return solve(0, -1, rack, dp);
+
+  // Tabulation
+  // T=O(n*n) S=O(n*n)
+  vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
+  for (int i = n - 1; i >= 0; i--) {
+    for (int j = i-1; j >= -1; j--) {
+      int pick = 0;
+      if (j == -1 || rack[i] > rack[j]) pick = rack[i] + dp[i+1][i+1];
+      int notPick = dp[i+1][j+1];
+
+      dp[i][j + 1] = max(pick, notPick);
+    }
+  }
+  return dp[0][0];
+
+// space optimization
+// T=O(n*n) S=O(n)
+	vector<int> front(n+1, 0), curr(n+1, 0);
+	for (int i = n - 1; i >= 0; i--) {
+    for (int j = i-1; j >= -1; j--) {
+      int pick = 0;
+      if (j == -1 || rack[i] > rack[j]) pick = rack[i] + front[i+1];
+      int notPick = front[j+1];
+
+      curr[j + 1] = max(pick, notPick);
+    }
+	front = curr;
+  }
+  return front[0];
+}
