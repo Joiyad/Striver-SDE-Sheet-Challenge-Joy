@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+bool isPalindrome(int i, int j, string s){
+    while(i < j){
+        if(s[i] != s[j]) return false;
+        i++;
+        j--;
+    }
+    return true;
+}
+
+
+int solve(int i, string str, vector<int> &dp){
+    // base case
+    if(i == str.size()) return 0;
+    if(dp[i] != -1) return dp[i];
+
+    // try all possibilities
+    int minm = INT_MAX;
+    for(int j=i; j<str.size(); j++){
+        if(isPalindrome(i, j, str)){
+            int cost = 1 + solve(j+1, str, dp);
+            minm = min(minm, cost);
+        }
+    }
+
+    return dp[i] = minm;
+}
+
+
+int palindromePartitioning(string str) {
+    // Approach: dp partitioning 
+    // T=O(n*n) S=O(n)
+    vector<int> dp(str.size(), -1);
+    return solve(0, str, dp)-1;
+}
